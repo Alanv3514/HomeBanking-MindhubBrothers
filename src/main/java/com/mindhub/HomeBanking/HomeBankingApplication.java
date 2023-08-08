@@ -38,6 +38,7 @@ public class HomeBankingApplication {
 			AccountRepository.save(new Account(Michelle, 30000.0, LocalDate.now()));
 			AccountRepository.save(new Account(Michelle, 50000.0, LocalDate.now()));
 
+
 		};
 	}
 
