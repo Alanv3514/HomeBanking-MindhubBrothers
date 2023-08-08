@@ -1,5 +1,6 @@
 package com.mindhub.HomeBanking.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -77,7 +78,6 @@ public class Client {
     public int hashCode() {
         return Objects.hash(firstName, lastName, email);
     }
-
 
 
     public Set<Account> getAccounts() {
