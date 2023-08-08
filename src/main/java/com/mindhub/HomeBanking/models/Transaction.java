@@ -22,7 +22,7 @@ public class Transaction {
     private String description;
     private LocalDate date;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="transaction_id")
+    @JoinColumn(name="account_id")
     private Account account;
 
     public Transaction(){};
