@@ -3,6 +3,7 @@ package com.mindhub.HomeBanking.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mindhub.HomeBanking.enums.TransactionType;
 import org.hibernate.annotations.GenericGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -32,7 +33,7 @@ public class Account {
 
     public Account(Client owner, Double balance, LocalDate date) {
         this.setOwner(owner);
-        owner.getAccounts().add(this);
+        this.owner.getAccounts().add(this);
         this.number="VIN"+String.format("%03d",this.getOwner().getAccounts().size());
         this.balance = balance;
         this.date = date;
@@ -91,15 +92,9 @@ public class Account {
         return transactions;
     }
 
-    public void addTransactions(Transaction transaction) {
-        this.setBalance(
-                transaction.getType() ==
-                TransactionType.CREDIT
-                        ? getBalance()+ transaction.getAmount()
-                        : getBalance()- transaction.getAmount());
-
-        transaction.setAccount(this);
+    public void addTransaction(Transaction transaction) {
         transactions.add(transaction);
+
     }
 
 }
