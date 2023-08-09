@@ -1,14 +1,10 @@
 package com.mindhub.HomeBanking.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mindhub.HomeBanking.enums.TransactionType;
 import org.hibernate.annotations.GenericGenerator;
-import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -23,7 +19,6 @@ public class Account {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="owner_id")
-    @JsonIgnoreProperties(value = "accounts")
     private Client owner;
 
     @OneToMany(mappedBy="account", fetch=FetchType.EAGER)
