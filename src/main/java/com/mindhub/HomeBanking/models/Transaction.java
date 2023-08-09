@@ -1,15 +1,9 @@
 package com.mindhub.HomeBanking.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mindhub.HomeBanking.enums.TransactionType;
-import net.bytebuddy.asm.Advice;
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
 
 @Entity
 public class Transaction {
