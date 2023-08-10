@@ -1,5 +1,7 @@
 package com.mindhub.HomeBanking;
 
+import com.mindhub.HomeBanking.enums.CardColor;
+import com.mindhub.HomeBanking.enums.CardType;
 import com.mindhub.HomeBanking.enums.TransactionType;
 import com.mindhub.HomeBanking.models.*;
 import com.mindhub.HomeBanking.repositories.*;
@@ -19,7 +21,12 @@ public class HomeBankingApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(ClientRepository ClientRepository, AccountRepository AccountRepository, TransactionRepository TransactionRepository, LoanRepository LoanRepository, ClientLoanRepository ClientLoanRepository) {
+	public CommandLineRunner initData(ClientRepository ClientRepository,
+									  AccountRepository AccountRepository,
+									  TransactionRepository TransactionRepository,
+									  LoanRepository LoanRepository,
+									  ClientLoanRepository ClientLoanRepository,
+									  CardRepository CardRepository) {
 		return (args) -> {
 
 			Client Melba= new Client("Melba", "Morel","MelMor@email.com");
@@ -65,9 +72,43 @@ public class HomeBankingApplication {
 
 			Melba.addClientLoan(MelbaClientLoan);
 			Chloe.addClientLoan(ChloeClientLoan);
-
 			ClientLoanRepository.save(MelbaClientLoan);
 			ClientLoanRepository.save(ChloeClientLoan);
+
+			Card card1 = new Card(
+					Melba,
+					CardType.DEBIT,
+					CardColor.GOLD,
+					"8545-8966-9652-6432",
+					521,
+					LocalDate.now(),
+					LocalDate.now().plusYears(5)
+			);
+			Card card2 = new Card(
+					Melba,
+					CardType.CREDIT,
+					CardColor.TITANIUM,
+					"8545-8342-6437-9472",
+					243,
+					LocalDate.now(),
+					LocalDate.now().plusYears(2)
+			);
+			Card card3 = new Card(
+					Chloe,
+					CardType.CREDIT,
+					CardColor.SILVER,
+					"8545-5747-9062-4235",
+					993,
+					LocalDate.now(),
+					LocalDate.now().plusYears(4)
+			);
+			CardRepository.save(card1);
+			CardRepository.save(card2);
+			CardRepository.save(card3);
+
+			ClientRepository.findById(1L).get().getCards().add(card1);
+			ClientRepository.findById(1L).get().getCards().add(card2);
+			ClientRepository.findById(2L).get().getCards().add(card3);
 
 
 		};
