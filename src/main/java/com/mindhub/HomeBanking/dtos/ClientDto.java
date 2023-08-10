@@ -15,6 +15,7 @@ public class ClientDto  {
 
     private List<AccountDto> accounts;
     private List<ClientLoanDTO> loans;
+    private List<CardDto> cards;
     public ClientDto(Client client) {
 
         this.id = client.getId();
@@ -27,6 +28,9 @@ public class ClientDto  {
                 .collect(toList());
         this.loans = client.getClientLoans().stream()
                 .map(ClientLoanDTO::new)
+                .collect(toList());
+        this.cards = client.getCards().stream()
+                .map(CardDto::new)
                 .collect(toList());
     }
 
@@ -49,5 +53,8 @@ public class ClientDto  {
     }
     public List<ClientLoanDTO> getLoans() {
         return loans;
+    }
+    public List<CardDto> getCards() {
+        return cards;
     }
 }
