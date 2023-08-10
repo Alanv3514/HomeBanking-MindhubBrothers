@@ -54,7 +54,7 @@ public class HomeBankingApplication {
 			List<String> credits = List.of("mortgage", "personal","automotive credit");
 			List<Integer> payments = List.of(2, 4,6,12,24,32,48,60);
 			for (String i: credits){
-				LoanRepository.save(new Loan("mortgage", 40000, payments));
+				LoanRepository.save(new Loan(i, 40000, payments));
 			}
 
 			ClientLoan MelbaClientLoan = new ClientLoan(LoanRepository.findById(1L).get(), 40000.0, 60);
