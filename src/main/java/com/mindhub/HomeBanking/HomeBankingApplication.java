@@ -1,9 +1,9 @@
 package com.mindhub.HomeBanking;
 
-import com.mindhub.HomeBanking.enums.CardColor;
-import com.mindhub.HomeBanking.enums.CardType;
-import com.mindhub.HomeBanking.enums.TransactionType;
-import com.mindhub.HomeBanking.models.*;
+import com.mindhub.HomeBanking.models.Enums.CardColor;
+import com.mindhub.HomeBanking.models.Enums.CardType;
+import com.mindhub.HomeBanking.models.Enums.TransactionType;
+import com.mindhub.HomeBanking.models.Entities.*;
 import com.mindhub.HomeBanking.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

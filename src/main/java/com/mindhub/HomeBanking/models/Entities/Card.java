@@ -1,14 +1,11 @@
-package com.mindhub.HomeBanking.models;
+package com.mindhub.HomeBanking.models.Entities;
 
-import com.mindhub.HomeBanking.enums.CardColor;
-import com.mindhub.HomeBanking.enums.CardType;
-import com.mindhub.HomeBanking.enums.TransactionType;
+import com.mindhub.HomeBanking.models.Enums.CardColor;
+import com.mindhub.HomeBanking.models.Enums.CardType;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 public class Card {

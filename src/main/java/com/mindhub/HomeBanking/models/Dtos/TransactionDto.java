@@ -1,8 +1,7 @@
-package com.mindhub.HomeBanking.dtos;
+package com.mindhub.HomeBanking.models.Dtos;
 
-import com.mindhub.HomeBanking.enums.TransactionType;
-import com.mindhub.HomeBanking.models.Account;
-import com.mindhub.HomeBanking.models.Transaction;
+import com.mindhub.HomeBanking.models.Enums.TransactionType;
+import com.mindhub.HomeBanking.models.Entities.Transaction;
 
 import java.time.LocalDate;
 
