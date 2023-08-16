@@ -1,5 +1,6 @@
 package com.mindhub.HomeBanking.models.Entities;
 
+import com.mindhub.HomeBanking.models.Enums.LoanType;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -13,41 +14,35 @@ public class ClientLoan{
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
-    private Double amount;
-    private Integer payments;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Client> clients = new HashSet<>();
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Client client;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Loan loan;
 
     public ClientLoan(){}
 
-    public ClientLoan(Loan loan, Double amount, Integer payments) {
-        this.amount = amount;
-        this.payments = payments;
-        this.loan = loan;
-    }
 
     public Long getId() {
         return id;
     }
 
-    public Double getAmount() {
-        return amount;
+
+
+    public Client getClient() {
+        return client;
     }
 
-    public Integer getPayments() {
-        return payments;
-    }
-
-    public Set<Client> getClients() {
-        return clients;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     public Loan getLoan() {
         return loan;
+    }
+
+    public void setLoan(Loan loan) {
+        this.loan = loan;
     }
 
 }
