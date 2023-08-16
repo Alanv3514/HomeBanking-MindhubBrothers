@@ -1,4 +1,4 @@
-package com.mindhub.HomeBanking.models;
+package com.mindhub.HomeBanking.models.Entities;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -19,8 +19,13 @@ public class Client {
     private String email;
 
     @OneToMany(mappedBy="owner", fetch=FetchType.EAGER)
-    Set<Account> accounts = new HashSet<>();
+    private Set<Account> accounts = new HashSet<>();
 
+    @OneToMany (mappedBy = "client", fetch = FetchType.EAGER)
+    private Set<ClientLoan> clientLoans = new HashSet<>();
+
+    @OneToMany(mappedBy="cardHolder", fetch=FetchType.EAGER)
+    private Set<Card> cards = new HashSet<>();
 
     public Client(){};
 
@@ -29,7 +34,9 @@ public class Client {
         this.lastName = lastName;
         this.email = email;
     }
-
+    public Long getId() {
+        return id;
+    }
     public String getFirstName() {
         return firstName;
     }
@@ -77,7 +84,6 @@ public class Client {
     }
 
 
-
     public Set<Account> getAccounts() {
         return accounts;
     }
@@ -86,4 +92,22 @@ public class Client {
         account.setOwner(this);
         accounts.add(account);
     }
+    public Set<ClientLoan> getClientLoans() {
+        return clientLoans;
+    }
+
+    public void addClientLoan(ClientLoan clientLoan) {
+        clientLoan.setClient(this);
+        clientLoans.add(clientLoan);
+    }
+    public Set<Card> getCards() {
+        return cards;
+    }
+
+    public void addCard(Card card) {
+        card.addCardHolder(this);
+        cards.add(card);
+    }
+
+
 }
