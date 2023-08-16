@@ -2,6 +2,7 @@ package com.mindhub.HomeBanking;
 
 import com.mindhub.HomeBanking.models.Enums.CardColor;
 import com.mindhub.HomeBanking.models.Enums.CardType;
+import com.mindhub.HomeBanking.models.Enums.LoanType;
 import com.mindhub.HomeBanking.models.Enums.TransactionType;
 import com.mindhub.HomeBanking.models.Entities.*;
 import com.mindhub.HomeBanking.repositories.*;
@@ -34,49 +35,58 @@ public class HomeBankingApplication {
 			ClientRepository.save(Melba);
 			ClientRepository.save(Chloe);
 
-			AccountRepository.save(new Account(Melba, 5000.0, LocalDate.now()));
-			AccountRepository.save(new Account(Melba, 7500.0, LocalDate.now().plusDays(1)));
-			AccountRepository.save(new Account(Chloe, 100.0, LocalDate.now()));
-			AccountRepository.save(new Account(Chloe, 20.0, LocalDate.now()));
+			Account cuenta1= new Account("VIN"+String.format("%03d",AccountRepository.count()+1 ),25000.0,LocalDate.now());
+			Melba.addAccount(cuenta1);
+			AccountRepository.save(cuenta1);
 
-			TransactionRepository.save(new Transaction(AccountRepository.findById(1L).get(), TransactionType.CREDIT, 1234.0, "Cobro prestamo"));
-			TransactionRepository.save(new Transaction(AccountRepository.findById(1l).get(), TransactionType.DEBIT, 24.0, "Compra Caramelo"));
-			TransactionRepository.save(new Transaction(AccountRepository.findById(1L).get(), TransactionType.CREDIT, 2500.0, "Cobro de Changa"));
-			TransactionRepository.save(new Transaction(AccountRepository.findById(1L).get(), TransactionType.DEBIT, 3000.0, "Pan y Leche"));
 
-			TransactionRepository.save(new Transaction(AccountRepository.findById(2L).get(), TransactionType.CREDIT, 1234.0, "lorem ipsum dolor sit amet,"));
-			TransactionRepository.save(new Transaction(AccountRepository.findById(2L).get(), TransactionType.DEBIT, 24.0, " consectetur adipiscing elit,"));
-			TransactionRepository.save(new Transaction(AccountRepository.findById(2L).get(), TransactionType.CREDIT, 2500.0, "sed do eiusmod tempor incididunt ut"));
-			TransactionRepository.save(new Transaction(AccountRepository.findById(2L).get(), TransactionType.DEBIT, 3000.0, "  labore et dolore magna aliqua."));
+			Account cuenta2= new Account("VIN"+String.format("%03d", AccountRepository.count()+1),15000.0,LocalDate.now());
+			Melba.addAccount(cuenta2);
+			AccountRepository.save(cuenta2);
 
-			TransactionRepository.save(new Transaction(AccountRepository.findById(3L).get(), TransactionType.CREDIT, 1234.0, "lorem ipsum dolor sit amet,"));
-			TransactionRepository.save(new Transaction(AccountRepository.findById(3L).get(), TransactionType.DEBIT, 24.0, " consectetur adipiscing elit,"));
-			TransactionRepository.save(new Transaction(AccountRepository.findById(4L).get(), TransactionType.CREDIT, 2500.0, "sed do eiusmod tempor incididunt ut"));
-			TransactionRepository.save(new Transaction(AccountRepository.findById(3L).get(), TransactionType.DEBIT, 3000.0, "  labore et dolore magna aliqua."));
+			Account cuenta3= new Account("VIN"+String.format("%03d", AccountRepository.count()+1),20000.0,LocalDate.now());
+			Chloe.addAccount(cuenta3);
+			AccountRepository.save(cuenta3);
 
-			TransactionRepository.save(new Transaction(AccountRepository.findById(1L).get(), TransactionType.CREDIT, 1234.0, "Deposito inicial"));
-			TransactionRepository.save(new Transaction(AccountRepository.findById(4L).get(), TransactionType.DEBIT, 24.0, " consectetur adipiscing elit,"));
-			TransactionRepository.save(new Transaction(AccountRepository.findById(2L).get(), TransactionType.CREDIT, 2500.0, "sed do eiusmod tempor incididunt ut"));
-			TransactionRepository.save(new Transaction(AccountRepository.findById(3L).get(), TransactionType.DEBIT, 3000.0, "  labore et dolore magna aliqua."));
-			List<String> credits = List.of("mortgage", "personal","automotive credit");
-			List<Integer> payments = List.of(2, 4,6,12,24,32,48,60);
-			for (String i: credits){
-				LoanRepository.save(new Loan(i, 40000, payments));
-			}
+			Transaction transaction1=new Transaction(TransactionType.CREDIT,25000.0,"platita extra");
+			Transaction transaction2=new Transaction(TransactionType.DEBIT,500.0,"compra de manaos");
 
-			ClientLoan MelbaClientLoan = new ClientLoan(LoanRepository.findById(1L).get(), 40000.0, 60);
-			ClientLoan ChloeClientLoan = new ClientLoan(LoanRepository.findById(2L).get(), 40000.0, 60);
+			cuenta1.addTransaction(transaction1);
+			cuenta1.addTransaction(transaction2);
 
-			MelbaClientLoan.getClients().add(Melba);
-			ChloeClientLoan.getClients().add(Chloe);
+			TransactionRepository.save(transaction1);
+			TransactionRepository.save(transaction2);
 
-			Melba.addClientLoan(MelbaClientLoan);
-			Chloe.addClientLoan(ChloeClientLoan);
-			ClientLoanRepository.save(MelbaClientLoan);
-			ClientLoanRepository.save(ChloeClientLoan);
+			List<Integer> payments = List.of(2, 4,6,12,24);
+			Loan loan1= new Loan(LoanType.mortgage, 400000, payments);
+			Loan loan2= new Loan(LoanType.personal, 30000, payments);
+			Loan loan3= new Loan(LoanType.automotive, 1000, payments);
+			ClientLoan clientLoan1 =new ClientLoan();
+			ClientLoan clientLoan2=new ClientLoan();
+			ClientLoan clientLoan3=new ClientLoan();
+			ClientLoan clientLoan4=new ClientLoan();
+
+			Melba.addClientLoan(clientLoan1);
+			Melba.addClientLoan(clientLoan2);
+			Melba.addClientLoan(clientLoan3);
+
+			loan1.addClientLoan(clientLoan1);
+			loan2.addClientLoan(clientLoan2);
+			loan3.addClientLoan(clientLoan3);
+
+			Chloe.addClientLoan(clientLoan4);
+			loan2.addClientLoan(clientLoan4);
+
+			LoanRepository.save(loan1);
+			LoanRepository.save(loan2);
+			LoanRepository.save(loan3);
+
+			ClientLoanRepository.save(clientLoan1);
+			ClientLoanRepository.save(clientLoan2);
+			ClientLoanRepository.save(clientLoan3);
+			ClientLoanRepository.save(clientLoan4);
 
 			Card card1 = new Card(
-					Melba,
 					CardType.DEBIT,
 					CardColor.GOLD,
 					"8545-8966-9652-6432",
@@ -85,7 +95,6 @@ public class HomeBankingApplication {
 					LocalDate.now().plusYears(5)
 			);
 			Card card2 = new Card(
-					Melba,
 					CardType.CREDIT,
 					CardColor.TITANIUM,
 					"8545-8342-6437-9472",
@@ -94,7 +103,6 @@ public class HomeBankingApplication {
 					LocalDate.now().plusYears(2)
 			);
 			Card card3 = new Card(
-					Chloe,
 					CardType.CREDIT,
 					CardColor.SILVER,
 					"8545-5747-9062-4235",
@@ -102,13 +110,14 @@ public class HomeBankingApplication {
 					LocalDate.now(),
 					LocalDate.now().plusYears(4)
 			);
+
+			card1.addCardHolder(Melba);
+			card2.addCardHolder(Melba);
+			card3.addCardHolder(Chloe);
+
 			CardRepository.save(card1);
 			CardRepository.save(card2);
 			CardRepository.save(card3);
-
-			ClientRepository.findById(1L).get().getCards().add(card1);
-			ClientRepository.findById(1L).get().getCards().add(card2);
-			ClientRepository.findById(2L).get().getCards().add(card3);
 
 
 		};
