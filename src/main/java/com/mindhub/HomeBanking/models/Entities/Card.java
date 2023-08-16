@@ -28,8 +28,7 @@ public class Card {
 
     public Card(){};
 
-    public Card(Client cardHolder, CardType type, CardColor color, String number, Integer cvv, LocalDate fromDate, LocalDate thruDate) {
-        this.setCardHolder(cardHolder);
+    public Card( CardType type, CardColor color, String number, Integer cvv, LocalDate fromDate, LocalDate thruDate) {
         this.type = type;
         this.color = color;
         this.number = number;
@@ -99,8 +98,7 @@ public class Card {
         return cardHolder;
     }
 
-    public void setCardHolder(Client client) {
-        client.getCards().add(this);
+    public void addCardHolder(Client client) {
         this.cardHolder = client;
     }
 
