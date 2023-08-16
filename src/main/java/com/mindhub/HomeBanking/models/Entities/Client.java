@@ -19,9 +19,9 @@ public class Client {
     private String email;
 
     @OneToMany(mappedBy="owner", fetch=FetchType.EAGER)
-    Set<Account> accounts = new HashSet<>();
+    private Set<Account> accounts = new HashSet<>();
 
-    @ManyToMany(mappedBy = "clients", fetch = FetchType.EAGER)
+    @OneToMany (mappedBy = "client", fetch = FetchType.EAGER)
     private Set<ClientLoan> clientLoans = new HashSet<>();
 
     @OneToMany(mappedBy="cardHolder", fetch=FetchType.EAGER)
@@ -89,6 +89,7 @@ public class Client {
     }
 
     public void addAccount(Account account) {
+        account.setOwner(this);
         accounts.add(account);
     }
     public Set<ClientLoan> getClientLoans() {
@@ -96,6 +97,7 @@ public class Client {
     }
 
     public void addClientLoan(ClientLoan clientLoan) {
+        clientLoan.setClient(this);
         clientLoans.add(clientLoan);
     }
     public Set<Card> getCards() {
@@ -103,6 +105,7 @@ public class Client {
     }
 
     public void addCard(Card card) {
+        card.addCardHolder(this);
         cards.add(card);
     }
 
