@@ -21,11 +21,9 @@ public class Transaction {
 
     public Transaction(){};
 
-    public Transaction(Account account, TransactionType type, Double amount, String description) {
+    public Transaction(TransactionType type, Double amount, String description) {
         this.type = type;
         setAmount( amount, type);
-        this.account = account;
-        this.account.addTransaction(this);
         this.description = description;
         this.date = LocalDate.now();
     }
