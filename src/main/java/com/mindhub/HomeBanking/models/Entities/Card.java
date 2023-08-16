@@ -15,8 +15,10 @@ public class Card {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name="cardHolder_id")
-    private Client cardHolder;
+    @JoinColumn(name="owner_id")
+    private Client owner;
+
+    private String cardHolder;
 
     private CardType type;
     private CardColor color;
@@ -93,15 +95,22 @@ public class Card {
         this.thruDate = thruDate;
     }
 
-    public Client getCardHolder() {
-
+    public String getCardHolder() {
         return cardHolder;
     }
 
     public void addCardHolder(Client client) {
-        this.cardHolder = client;
+        this.cardHolder = client.getFirstName() + " " + client.getLastName();
+        this.owner = client;
     }
 
+    public Client getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Client owner) {
+        this.owner = owner;
+    }
 
     @Override
     public String toString() {

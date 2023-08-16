@@ -10,6 +10,7 @@ public class CardDto {
 
     private Long id;
     private CardType type;
+    private String cardHolder;
     private CardColor color;
     private String number;
     private Integer cvv;
@@ -19,6 +20,7 @@ public class CardDto {
     public CardDto(Card card) {
         this.id = card.getId();
         this.type = card.getType();
+        this.cardHolder =card.getCardHolder();
         this.color = card.getColor();
         this.number = card.getNumber();
         this.cvv = card.getCvv();
@@ -36,7 +38,9 @@ public class CardDto {
         return type;
     }
 
-
+    public String getCardHolder() {
+        return cardHolder;
+    }
     public CardColor getColor() {
         return color;
     }
