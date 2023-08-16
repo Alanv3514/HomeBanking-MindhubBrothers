@@ -22,14 +22,12 @@ public class Account {
     private Client owner;
 
     @OneToMany(mappedBy="account", fetch=FetchType.EAGER)
-    Set<Transaction> transactions = new HashSet<>();
+    private Set<Transaction> transactions = new HashSet<>();
 
     public Account(){};
 
-    public Account(Client owner, Double balance, LocalDate date) {
-        this.setOwner(owner);
-        this.owner.getAccounts().add(this);
-        this.number="VIN"+String.format("%03d",this.getOwner().getAccounts().size());
+    public Account(String number,Double balance, LocalDate date) {
+        this.number=number;
         this.balance = balance;
         this.date = date;
     }
@@ -79,7 +77,6 @@ public class Account {
     }
 
     public void setOwner(Client owner) {
-
         this.owner = owner;
     }
 
@@ -88,6 +85,7 @@ public class Account {
     }
 
     public void addTransaction(Transaction transaction) {
+        transaction.setAccount(this);
         transactions.add(transaction);
 
     }
