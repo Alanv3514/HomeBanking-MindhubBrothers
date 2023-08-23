@@ -1,10 +1,10 @@
 package com.mindhub.HomeBanking.controllers;
 
-import com.mindhub.HomeBanking.models.Dtos.CardDto;
-import com.mindhub.HomeBanking.models.Entities.Card;
-import com.mindhub.HomeBanking.models.Entities.Client;
-import com.mindhub.HomeBanking.models.Enums.CardColor;
-import com.mindhub.HomeBanking.models.Enums.CardType;
+import com.mindhub.HomeBanking.dtos.CardDto;
+import com.mindhub.HomeBanking.models.entities.Card;
+import com.mindhub.HomeBanking.models.entities.Client;
+import com.mindhub.HomeBanking.models.enums.CardColor;
+import com.mindhub.HomeBanking.models.enums.CardType;
 import com.mindhub.HomeBanking.repositories.AccountRepository;
 import com.mindhub.HomeBanking.repositories.CardRepository;
 import com.mindhub.HomeBanking.repositories.ClientRepository;

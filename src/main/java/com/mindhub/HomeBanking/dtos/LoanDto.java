@@ -1,7 +1,7 @@
 
-package com.mindhub.HomeBanking.models.Dtos;
+package com.mindhub.HomeBanking.dtos;
 
-        import com.mindhub.HomeBanking.models.Entities.Loan;
+        import com.mindhub.HomeBanking.models.entities.Loan;
         import java.util.List;
 
 public class LoanDto{

@@ -1,6 +1,6 @@
 package com.mindhub.HomeBanking.configurations;
 
-import com.mindhub.HomeBanking.models.Entities.Client;
+import com.mindhub.HomeBanking.models.entities.Client;
 import com.mindhub.HomeBanking.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

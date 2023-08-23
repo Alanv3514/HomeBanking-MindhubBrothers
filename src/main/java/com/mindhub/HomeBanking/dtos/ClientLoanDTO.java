@@ -1,7 +1,6 @@
-package com.mindhub.HomeBanking.models.Dtos;
+package com.mindhub.HomeBanking.dtos;
 
-import com.mindhub.HomeBanking.models.Entities.ClientLoan;
-import com.mindhub.HomeBanking.models.Enums.LoanType;
+import com.mindhub.HomeBanking.models.entities.ClientLoan;
 
 import java.util.List;
 

@@ -1,12 +1,10 @@
 package com.mindhub.HomeBanking.controllers;
 
-import com.mindhub.HomeBanking.models.Dtos.AccountDto;
-import com.mindhub.HomeBanking.models.Dtos.ClientDto;
-import com.mindhub.HomeBanking.models.Entities.Account;
-import com.mindhub.HomeBanking.models.Entities.Client;
+import com.mindhub.HomeBanking.dtos.AccountDto;
+import com.mindhub.HomeBanking.models.entities.Account;
+import com.mindhub.HomeBanking.models.entities.Client;
 import com.mindhub.HomeBanking.repositories.AccountRepository;
 import com.mindhub.HomeBanking.repositories.ClientRepository;
-import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

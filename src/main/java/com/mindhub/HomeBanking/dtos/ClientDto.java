@@ -1,5 +1,5 @@
-package com.mindhub.HomeBanking.models.Dtos;
-import com.mindhub.HomeBanking.models.Entities.Client;
+package com.mindhub.HomeBanking.dtos;
+import com.mindhub.HomeBanking.models.entities.Client;
 
 import java.util.List;
 
