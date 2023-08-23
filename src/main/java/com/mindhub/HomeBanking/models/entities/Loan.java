@@ -1,6 +1,6 @@
-package com.mindhub.HomeBanking.models.Entities;
+package com.mindhub.HomeBanking.models.entities;
 
-import com.mindhub.HomeBanking.models.Enums.LoanType;
+import com.mindhub.HomeBanking.models.enums.LoanType;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;

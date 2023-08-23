@@ -1,4 +1,4 @@
-package com.mindhub.HomeBanking.models.Enums;
+package com.mindhub.HomeBanking.models.enums;
 
 public enum CardType {
     CREDIT,

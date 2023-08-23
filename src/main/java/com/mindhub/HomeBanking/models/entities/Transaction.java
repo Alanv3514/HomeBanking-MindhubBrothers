@@ -1,6 +1,6 @@
-package com.mindhub.HomeBanking.models.Entities;
+package com.mindhub.HomeBanking.models.entities;
 
-import com.mindhub.HomeBanking.models.Enums.TransactionType;
+import com.mindhub.HomeBanking.models.enums.TransactionType;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.time.LocalDate;
