@@ -2,6 +2,7 @@ package com.mindhub.HomeBanking.configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -24,11 +25,11 @@ class WebAuthorization  {
 
 
         http.authorizeRequests()
-                .antMatchers("/admin/**").hasAuthority("ADMIN")
-                .antMatchers("/rest/**").hasAuthority("ADMIN")
-                .antMatchers("/api/**").permitAll()
-                .antMatchers("/web/index.html").permitAll()
-                .antMatchers("/**").permitAll();
+                .antMatchers("/web/index.html","/web/js/**","/web/css/**","/web/img/**").permitAll()
+                .antMatchers("/admin/**","/rest/**").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.GET,"/api/clients/current","/web/**","/api/accounts/**").hasAuthority("USER")
+                .antMatchers(HttpMethod.POST,"/api/**").permitAll()
+                .anyRequest().denyAll();
 
 
         http.formLogin()
@@ -52,7 +53,7 @@ class WebAuthorization  {
         // if logout is successful, just send a success response
         http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
 
-        http.logout().logoutUrl("/app/logout");
+        http.logout().logoutUrl("/api/logout");
         return http.build();
 
     }
