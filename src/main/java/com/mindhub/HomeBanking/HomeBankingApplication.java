@@ -16,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.mindhub.HomeBanking.utils.utils.genAccountId;
+
 @SpringBootApplication
 public class HomeBankingApplication {
 
@@ -38,16 +40,16 @@ private PasswordEncoder passwordEncoder;
 			ClientRepository.save(Melba);
 			ClientRepository.save(Chloe);
 
-			Account cuenta1= new Account("VIN"+String.format("%03d",AccountRepository.count()+1 ),25000.0,LocalDate.now());
+			Account cuenta1= new Account(genAccountId(AccountRepository),25000.0,LocalDate.now());
 			Melba.addAccount(cuenta1);
 			AccountRepository.save(cuenta1);
 
 
-			Account cuenta2= new Account("VIN"+String.format("%03d", AccountRepository.count()+1),15000.0,LocalDate.now());
+			Account cuenta2= new Account(genAccountId(AccountRepository),15000.0,LocalDate.now());
 			Melba.addAccount(cuenta2);
 			AccountRepository.save(cuenta2);
 
-			Account cuenta3= new Account("VIN"+String.format("%03d", AccountRepository.count()+1),20000.0,LocalDate.now());
+			Account cuenta3= new Account(genAccountId(AccountRepository),20000.0,LocalDate.now());
 			Chloe.addAccount(cuenta3);
 			AccountRepository.save(cuenta3);
 
@@ -92,26 +94,20 @@ private PasswordEncoder passwordEncoder;
 			Card card1 = new Card(
 					CardType.DEBIT,
 					CardColor.GOLD,
-					"8545-8966-9652-6432",
-					521,
-					LocalDate.now(),
-					LocalDate.now().plusYears(5)
+					LocalDate.now()
+
 			);
 			Card card2 = new Card(
 					CardType.CREDIT,
 					CardColor.TITANIUM,
-					"8545-8342-6437-9472",
-					243,
-					LocalDate.now(),
-					LocalDate.now().plusYears(2)
+					LocalDate.now()
+
 			);
 			Card card3 = new Card(
 					CardType.CREDIT,
 					CardColor.SILVER,
-					"8545-5747-9062-4235",
-					993,
-					LocalDate.now(),
-					LocalDate.now().plusYears(4)
+					LocalDate.now()
+
 			);
 
 			card1.addCardHolder(Melba);
