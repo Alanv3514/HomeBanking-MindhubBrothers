@@ -47,11 +47,17 @@ public class CardController {
 
     @RequestMapping("/clients/current/cards")
     public ResponseEntity<Object> createCard(@RequestParam  CardType cardType, @RequestParam CardColor cardColor, Authentication authentication) {
-        if (clientRepository.findByEmail(authentication.getName()).getCards().stream().count()==3) {
 
-            return new ResponseEntity<>("Already have 3 cards", HttpStatus.FORBIDDEN);
 
+        long count = clientRepository.findByEmail(authentication.getName())
+                .getCards()
+                .stream()
+                .filter(card -> card.getType().equals(cardType)).count();
+
+        if (count == 3) {
+            return new ResponseEntity<>("Already have 3 cards of " + cardType, HttpStatus.FORBIDDEN);
         }
+
 
         Card newCard= new Card(cardType, cardColor, LocalDate.now());
         Client AuthClient = clientRepository.findByEmail(authentication.getName());
