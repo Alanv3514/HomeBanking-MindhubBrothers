@@ -89,7 +89,7 @@ public class Card {
             }
             sum += aux;
         }
-        this.cvv= sum % 10000;
+        this.cvv= 300+(sum % 10000);
     }
     public LocalDate getFromDate() {
         return fromDate;
