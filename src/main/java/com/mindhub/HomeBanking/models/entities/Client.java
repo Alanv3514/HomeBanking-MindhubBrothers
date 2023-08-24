@@ -1,5 +1,6 @@
-package com.mindhub.HomeBanking.models.Entities;
+package com.mindhub.HomeBanking.models.entities;
 
+import com.mindhub.HomeBanking.models.enums.RoleType;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -17,22 +18,25 @@ public class Client {
     private String firstName;
     private String lastName;
     private String email;
-
+    private String password;
+    private RoleType role;
     @OneToMany(mappedBy="owner", fetch=FetchType.EAGER)
     private Set<Account> accounts = new HashSet<>();
 
     @OneToMany (mappedBy = "client", fetch = FetchType.EAGER)
     private Set<ClientLoan> clientLoans = new HashSet<>();
 
-    @OneToMany(mappedBy="cardHolder", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy="owner", fetch=FetchType.EAGER)
     private Set<Card> cards = new HashSet<>();
 
     public Client(){};
 
-    public Client( String firstName, String lastName, String email) {
+    public Client( String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.password=password;
+        this.role=RoleType.USER;
     }
     public Long getId() {
         return id;
@@ -59,6 +63,22 @@ public class Client {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public RoleType getRole() {
+        return role;
+    }
+
+    public void setRole(RoleType role) {
+        this.role = role;
     }
 
     @Override

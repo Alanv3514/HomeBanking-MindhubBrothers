@@ -1,6 +1,6 @@
-package com.mindhub.HomeBanking.models.Dtos;
+package com.mindhub.HomeBanking.dtos;
 
-import com.mindhub.HomeBanking.models.Entities.Account;
+import com.mindhub.HomeBanking.models.entities.Account;
 
 import java.time.LocalDate;
 import java.util.List;

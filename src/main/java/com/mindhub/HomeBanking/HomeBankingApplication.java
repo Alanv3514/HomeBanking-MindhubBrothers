@@ -1,18 +1,22 @@
 package com.mindhub.HomeBanking;
 
-import com.mindhub.HomeBanking.models.Enums.CardColor;
-import com.mindhub.HomeBanking.models.Enums.CardType;
-import com.mindhub.HomeBanking.models.Enums.LoanType;
-import com.mindhub.HomeBanking.models.Enums.TransactionType;
-import com.mindhub.HomeBanking.models.Entities.*;
+import com.mindhub.HomeBanking.models.enums.CardColor;
+import com.mindhub.HomeBanking.models.enums.CardType;
+import com.mindhub.HomeBanking.models.enums.LoanType;
+import com.mindhub.HomeBanking.models.enums.TransactionType;
+import com.mindhub.HomeBanking.models.entities.*;
 import com.mindhub.HomeBanking.repositories.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static com.mindhub.HomeBanking.utils.utils.genAccountId;
 
 @SpringBootApplication
 public class HomeBankingApplication {
@@ -20,7 +24,8 @@ public class HomeBankingApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(HomeBankingApplication.class, args);
 	}
-
+@Autowired
+private PasswordEncoder passwordEncoder;
 	@Bean
 	public CommandLineRunner initData(ClientRepository ClientRepository,
 									  AccountRepository AccountRepository,
@@ -30,21 +35,21 @@ public class HomeBankingApplication {
 									  CardRepository CardRepository) {
 		return (args) -> {
 
-			Client Melba= new Client("Melba", "Morel","MelMor@email.com");
-			Client Chloe= new Client("Chloe", "O'Brian","ChlObri@email.com");
+			Client Melba= new Client("Melba", "Morel","MelMor@email.com", passwordEncoder.encode("melba1234"));
+			Client Chloe= new Client("Chloe", "O'Brian","ChlObri@email.com", passwordEncoder.encode("chloe1234"));
 			ClientRepository.save(Melba);
 			ClientRepository.save(Chloe);
 
-			Account cuenta1= new Account("VIN"+String.format("%03d",AccountRepository.count()+1 ),25000.0,LocalDate.now());
+			Account cuenta1= new Account(genAccountId(AccountRepository),25000.0,LocalDate.now());
 			Melba.addAccount(cuenta1);
 			AccountRepository.save(cuenta1);
 
 
-			Account cuenta2= new Account("VIN"+String.format("%03d", AccountRepository.count()+1),15000.0,LocalDate.now());
+			Account cuenta2= new Account(genAccountId(AccountRepository),15000.0,LocalDate.now());
 			Melba.addAccount(cuenta2);
 			AccountRepository.save(cuenta2);
 
-			Account cuenta3= new Account("VIN"+String.format("%03d", AccountRepository.count()+1),20000.0,LocalDate.now());
+			Account cuenta3= new Account(genAccountId(AccountRepository),20000.0,LocalDate.now());
 			Chloe.addAccount(cuenta3);
 			AccountRepository.save(cuenta3);
 
@@ -89,26 +94,20 @@ public class HomeBankingApplication {
 			Card card1 = new Card(
 					CardType.DEBIT,
 					CardColor.GOLD,
-					"8545-8966-9652-6432",
-					521,
-					LocalDate.now(),
-					LocalDate.now().plusYears(5)
+					LocalDate.now()
+
 			);
 			Card card2 = new Card(
 					CardType.CREDIT,
 					CardColor.TITANIUM,
-					"8545-8342-6437-9472",
-					243,
-					LocalDate.now(),
-					LocalDate.now().plusYears(2)
+					LocalDate.now()
+
 			);
 			Card card3 = new Card(
 					CardType.CREDIT,
 					CardColor.SILVER,
-					"8545-5747-9062-4235",
-					993,
-					LocalDate.now(),
-					LocalDate.now().plusYears(4)
+					LocalDate.now()
+
 			);
 
 			card1.addCardHolder(Melba);

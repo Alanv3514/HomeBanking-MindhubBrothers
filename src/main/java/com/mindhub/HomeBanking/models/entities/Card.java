@@ -1,11 +1,14 @@
-package com.mindhub.HomeBanking.models.Entities;
+package com.mindhub.HomeBanking.models.entities;
 
-import com.mindhub.HomeBanking.models.Enums.CardColor;
-import com.mindhub.HomeBanking.models.Enums.CardType;
+import com.mindhub.HomeBanking.models.enums.CardColor;
+import com.mindhub.HomeBanking.models.enums.CardType;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Random;
+
+import static com.mindhub.HomeBanking.utils.utils.*;
 
 @Entity
 public class Card {
@@ -15,8 +18,10 @@ public class Card {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name="cardHolder_id")
-    private Client cardHolder;
+    @JoinColumn(name="owner_id")
+    private Client owner;
+
+    private String cardHolder;
 
     private CardType type;
     private CardColor color;
@@ -28,13 +33,13 @@ public class Card {
 
     public Card(){};
 
-    public Card( CardType type, CardColor color, String number, Integer cvv, LocalDate fromDate, LocalDate thruDate) {
+    public Card( CardType type, CardColor color, LocalDate fromDate) {
         this.type = type;
         this.color = color;
-        this.number = number;
-        this.cvv = cvv;
+        setNumber(genRandomCardNumber());
+        setCvv(genCvv(this.number));
         this.fromDate = fromDate;
-        this.thruDate = thruDate;
+        setThruDate(fromDate);
     }
 
     public Long getId() {
@@ -90,18 +95,25 @@ public class Card {
     }
 
     public void setThruDate(LocalDate thruDate) {
-        this.thruDate = thruDate;
+        this.thruDate = this.fromDate.plusYears(5);
     }
 
-    public Client getCardHolder() {
-
+    public String getCardHolder() {
         return cardHolder;
     }
 
     public void addCardHolder(Client client) {
-        this.cardHolder = client;
+        this.cardHolder = client.getFirstName() + " " + client.getLastName();
+        this.owner = client;
     }
 
+    public Client getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Client owner) {
+        this.owner = owner;
+    }
 
     @Override
     public String toString() {
