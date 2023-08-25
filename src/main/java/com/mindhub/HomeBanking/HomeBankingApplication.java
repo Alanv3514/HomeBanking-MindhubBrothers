@@ -16,7 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.mindhub.HomeBanking.utils.utils.genAccountId;
+import static com.mindhub.HomeBanking.utils.utils.*;
 
 @SpringBootApplication
 public class HomeBankingApplication {
@@ -110,13 +110,30 @@ private PasswordEncoder passwordEncoder;
 
 			);
 
+			card1.setNumber(genRandomCardNumber(CardRepository));
+			card1.setCvv(genCvv(card1.getNumber()));
 			card1.addCardHolder(Melba);
-			card2.addCardHolder(Melba);
-			card3.addCardHolder(Chloe);
-
 			CardRepository.save(card1);
+
+			card2.setNumber(genRandomCardNumber(CardRepository));
+			card2.setCvv(genCvv(card2.getNumber()));
+			card2.addCardHolder(Melba);
 			CardRepository.save(card2);
+
+			card3.setNumber(genRandomCardNumber(CardRepository));
+			card3.setCvv(genCvv(card3.getNumber()));
+			card3.addCardHolder(Chloe);
 			CardRepository.save(card3);
+
+
+
+
+
+
+
+
+
+
 
 
 		};

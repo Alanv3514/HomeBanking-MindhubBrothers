@@ -36,8 +36,6 @@ public class Card {
     public Card( CardType type, CardColor color, LocalDate fromDate) {
         this.type = type;
         this.color = color;
-        setNumber(genRandomCardNumber());
-        setCvv(genCvv(this.number));
         this.fromDate = fromDate;
         setThruDate(fromDate);
     }
