@@ -2,7 +2,6 @@ package com.mindhub.HomeBanking;
 
 import com.mindhub.HomeBanking.models.enums.CardColor;
 import com.mindhub.HomeBanking.models.enums.CardType;
-import com.mindhub.HomeBanking.models.enums.LoanType;
 import com.mindhub.HomeBanking.models.enums.TransactionType;
 import com.mindhub.HomeBanking.models.entities.*;
 import com.mindhub.HomeBanking.repositories.*;
@@ -63,9 +62,9 @@ private PasswordEncoder passwordEncoder;
 			TransactionRepository.save(transaction2);
 
 			List<Integer> payments = List.of(2, 4,6,12,24);
-			Loan loan1= new Loan(LoanType.mortgage, 400000, payments);
-			Loan loan2= new Loan(LoanType.personal, 30000, payments);
-			Loan loan3= new Loan(LoanType.automotive, 1000, payments);
+			Loan loan1= new Loan("mortgage", 400000, payments);
+			Loan loan2= new Loan("personal", 30000, payments);
+			Loan loan3= new Loan("automotive", 1000, payments);
 			ClientLoan clientLoan1 =new ClientLoan();
 			ClientLoan clientLoan2=new ClientLoan();
 			ClientLoan clientLoan3=new ClientLoan();
