@@ -110,17 +110,17 @@ private PasswordEncoder passwordEncoder;
 
 			);
 
-			card1.setNumber(genRandomCardNumber(CardRepository));
+			card1.setNumber(genRandomCardNumber());
 			card1.setCvv(genCvv(card1.getNumber()));
 			card1.addCardHolder(Melba);
 			CardRepository.save(card1);
 
-			card2.setNumber(genRandomCardNumber(CardRepository));
+			card2.setNumber(genRandomCardNumber());
 			card2.setCvv(genCvv(card2.getNumber()));
 			card2.addCardHolder(Melba);
 			CardRepository.save(card2);
 
-			card3.setNumber(genRandomCardNumber(CardRepository));
+			card3.setNumber(genRandomCardNumber());
 			card3.setCvv(genCvv(card3.getNumber()));
 			card3.addCardHolder(Chloe);
 			CardRepository.save(card3);

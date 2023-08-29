@@ -8,17 +8,16 @@ import java.util.Random;
 
 public class utils {
 
-    public static String genRandomCardNumber(CardRepository cardRepository) {
+    public static String genRandomCardNumber() {
         String cardNumber = "8545";
         Random random = new Random();
         for (int i = 0; i < 3; i++) {
             cardNumber += "-" + String.format("%04d", random.nextInt(10000));
         }
-        if (!cardRepository.findByNumber(cardNumber)) {
-            return cardNumber;
-        } else {
-            return genRandomCardNumber(cardRepository);
-        }
+
+
+        return cardNumber;
+
     }
     public static Integer genCvv(String cardNumber) {
         int sum = 0;
