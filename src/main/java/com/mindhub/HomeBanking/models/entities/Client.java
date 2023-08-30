@@ -36,7 +36,7 @@ public class Client {
         this.lastName = lastName;
         this.email = email;
         this.password=password;
-        this.role="USER";
+        this.role="CLIENT";
     }
     public Long getId() {
         return id;
