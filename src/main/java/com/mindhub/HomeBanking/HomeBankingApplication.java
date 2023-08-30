@@ -2,7 +2,6 @@ package com.mindhub.HomeBanking;
 
 import com.mindhub.HomeBanking.models.enums.CardColor;
 import com.mindhub.HomeBanking.models.enums.CardType;
-import com.mindhub.HomeBanking.models.enums.LoanType;
 import com.mindhub.HomeBanking.models.enums.TransactionType;
 import com.mindhub.HomeBanking.models.entities.*;
 import com.mindhub.HomeBanking.repositories.*;
@@ -16,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.mindhub.HomeBanking.utils.utils.genAccountId;
+import static com.mindhub.HomeBanking.utils.utils.*;
 
 @SpringBootApplication
 public class HomeBankingApplication {
@@ -37,8 +36,12 @@ private PasswordEncoder passwordEncoder;
 
 			Client Melba= new Client("Melba", "Morel","MelMor@email.com", passwordEncoder.encode("melba1234"));
 			Client Chloe= new Client("Chloe", "O'Brian","ChlObri@email.com", passwordEncoder.encode("chloe1234"));
+			Client Admin= new Client("admin", "admin","admin@email.com", passwordEncoder.encode("admin"));
 			ClientRepository.save(Melba);
 			ClientRepository.save(Chloe);
+
+			Admin.setRole("ADMIN");
+			ClientRepository.save(Admin);
 
 			Account cuenta1= new Account(genAccountId(AccountRepository),25000.0,LocalDate.now());
 			Melba.addAccount(cuenta1);
@@ -63,9 +66,9 @@ private PasswordEncoder passwordEncoder;
 			TransactionRepository.save(transaction2);
 
 			List<Integer> payments = List.of(2, 4,6,12,24);
-			Loan loan1= new Loan(LoanType.mortgage, 400000, payments);
-			Loan loan2= new Loan(LoanType.personal, 30000, payments);
-			Loan loan3= new Loan(LoanType.automotive, 1000, payments);
+			Loan loan1= new Loan("mortgage", 400000, payments);
+			Loan loan2= new Loan("personal", 30000, payments);
+			Loan loan3= new Loan("automotive", 1000, payments);
 			ClientLoan clientLoan1 =new ClientLoan();
 			ClientLoan clientLoan2=new ClientLoan();
 			ClientLoan clientLoan3=new ClientLoan();
@@ -110,13 +113,30 @@ private PasswordEncoder passwordEncoder;
 
 			);
 
+			card1.setNumber(genRandomCardNumber());
+			card1.setCvv(genCvv(card1.getNumber()));
 			card1.addCardHolder(Melba);
-			card2.addCardHolder(Melba);
-			card3.addCardHolder(Chloe);
-
 			CardRepository.save(card1);
+
+			card2.setNumber(genRandomCardNumber());
+			card2.setCvv(genCvv(card2.getNumber()));
+			card2.addCardHolder(Melba);
 			CardRepository.save(card2);
+
+			card3.setNumber(genRandomCardNumber());
+			card3.setCvv(genCvv(card3.getNumber()));
+			card3.addCardHolder(Chloe);
 			CardRepository.save(card3);
+
+
+
+
+
+
+
+
+
+
 
 
 		};

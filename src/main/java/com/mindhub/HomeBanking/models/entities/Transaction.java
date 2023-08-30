@@ -66,7 +66,7 @@ public class Transaction {
     }
 
     public String getDescription() {
-        return description;
+        return description + "-" + this.date;
     }
 
     public void setDescription(String description) {

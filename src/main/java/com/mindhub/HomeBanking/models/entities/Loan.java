@@ -1,6 +1,5 @@
 package com.mindhub.HomeBanking.models.entities;
 
-import com.mindhub.HomeBanking.models.enums.LoanType;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -15,7 +14,7 @@ public class Loan {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
-    private LoanType type;
+    private String type;
     private String name;
     private Double maxAmount;
     @ElementCollection
@@ -26,9 +25,9 @@ public class Loan {
     public Loan(){
     }
 
-    public Loan( LoanType type,double maxAmount, List<Integer> payments) {
+    public Loan( String type,double maxAmount, List<Integer> payments) {
         this.type=type;
-        this.name= type.name();
+        this.name= type;
         this.maxAmount = maxAmount;
         this.payments = payments;
     }
@@ -37,11 +36,11 @@ public class Loan {
         return id;
     }
 
-    public LoanType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(LoanType type) {
+    public void setType(String type) {
         this.type = type;
     }
 

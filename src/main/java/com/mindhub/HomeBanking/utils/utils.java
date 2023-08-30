@@ -1,6 +1,8 @@
 package com.mindhub.HomeBanking.utils;
 
 import com.mindhub.HomeBanking.repositories.AccountRepository;
+import com.mindhub.HomeBanking.repositories.CardRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Random;
 
@@ -12,7 +14,10 @@ public class utils {
         for (int i = 0; i < 3; i++) {
             cardNumber += "-" + String.format("%04d", random.nextInt(10000));
         }
+
+
         return cardNumber;
+
     }
     public static Integer genCvv(String cardNumber) {
         int sum = 0;
