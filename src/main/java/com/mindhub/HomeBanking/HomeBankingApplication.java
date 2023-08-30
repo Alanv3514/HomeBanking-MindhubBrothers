@@ -36,8 +36,12 @@ private PasswordEncoder passwordEncoder;
 
 			Client Melba= new Client("Melba", "Morel","MelMor@email.com", passwordEncoder.encode("melba1234"));
 			Client Chloe= new Client("Chloe", "O'Brian","ChlObri@email.com", passwordEncoder.encode("chloe1234"));
+			Client Admin= new Client("admin", "admin","admin@email.com", passwordEncoder.encode("admin"));
 			ClientRepository.save(Melba);
 			ClientRepository.save(Chloe);
+
+			Admin.setRole("ADMIN");
+			ClientRepository.save(Admin);
 
 			Account cuenta1= new Account(genAccountId(AccountRepository),25000.0,LocalDate.now());
 			Melba.addAccount(cuenta1);
