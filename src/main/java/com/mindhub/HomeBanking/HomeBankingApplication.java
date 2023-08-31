@@ -69,10 +69,10 @@ private PasswordEncoder passwordEncoder;
 			Loan loan1= new Loan("mortgage", 400000, List.of(12,24,36,48,60));
 			Loan loan2= new Loan("personal", 30000, List.of(2, 4,6,12,24));
 			Loan loan3= new Loan("automotive", 1000, List.of(12,24));
-			ClientLoan clientLoan1 =new ClientLoan();
-			ClientLoan clientLoan2=new ClientLoan();
-			ClientLoan clientLoan3=new ClientLoan();
-			ClientLoan clientLoan4=new ClientLoan();
+			ClientLoan clientLoan1 =new ClientLoan(100.0, 12);
+			ClientLoan clientLoan2=new ClientLoan(100.0, 12);
+			ClientLoan clientLoan3=new ClientLoan(100.0, 12);
+			ClientLoan clientLoan4=new ClientLoan(100.0, 12);
 
 			Melba.addClientLoan(clientLoan1);
 			Melba.addClientLoan(clientLoan2);

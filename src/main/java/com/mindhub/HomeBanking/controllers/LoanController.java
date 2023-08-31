@@ -1,6 +1,7 @@
 package com.mindhub.HomeBanking.controllers;
 
 import com.mindhub.HomeBanking.dtos.ClientDto;
+import com.mindhub.HomeBanking.dtos.ClientLoanRecord;
 import com.mindhub.HomeBanking.dtos.LoanDto;
 import com.mindhub.HomeBanking.models.entities.ClientLoan;
 import com.mindhub.HomeBanking.models.entities.Transaction;
@@ -12,10 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -47,11 +45,19 @@ public class LoanController {
     @Transactional
     @RequestMapping(value="/loans",method = RequestMethod.POST)
     public ResponseEntity<Object> createLoan(
-            @RequestParam Long loanId, @RequestParam Double amount,
-            @RequestParam Double payments, @RequestParam String toAccountNumber,
+            @RequestBody ClientLoanRecord clientLoanRecord,
             Authentication authentication){
 
-        if (loanId!=null || amount == null || payments == null || toAccountNumber.isEmpty()) {
+        Long loanId = clientLoanRecord.getLoanId();
+        Double amount = clientLoanRecord.getAmount();
+        Integer payments = clientLoanRecord.getPayments();
+        String toAccountNumber = clientLoanRecord.getToAccountNumber();
+
+        System.out.println("loan: "+ loanRepository.findById(loanId).get());
+        System.out.println("amount: "+amount);
+        System.out.println("payments: "+payments);
+        System.out.println("toAccountNumber: "+toAccountNumber);
+        if (loanId==null || amount == null || payments == null || toAccountNumber.isEmpty()) {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
         if (amount <= 0) {
@@ -60,8 +66,8 @@ public class LoanController {
         if (payments <= 0) {
             return new ResponseEntity<>("Payments must be positive", HttpStatus.FORBIDDEN);
         }
-        if (loanRepository.findById(loanId).isPresent() ) {
-            return new ResponseEntity<>("LoanId already in use", HttpStatus.FORBIDDEN);
+        if (!loanRepository.findById(loanId).isPresent() ) {
+            return new ResponseEntity<>("Loan not exist", HttpStatus.FORBIDDEN);
         }
         if (accountRepository.findByNumber(toAccountNumber) == null) {
             return new ResponseEntity<>("The destination account does not exist", HttpStatus.FORBIDDEN);
@@ -70,12 +76,12 @@ public class LoanController {
             return new ResponseEntity<>("The destination account does not belong to the logged user", HttpStatus.FORBIDDEN);
         }
 
-        if(amount<loanRepository.findById(loanId).get().getMaxAmount()){
+        if(amount>loanRepository.findById(loanId).get().getMaxAmount()){
             return new ResponseEntity<>("The amount is greater than the maximum allowed", HttpStatus.FORBIDDEN);
         }
 
         clientRepository.findByEmail(authentication.getName());
-        ClientLoan clientLoan =new ClientLoan();
+        ClientLoan clientLoan =new ClientLoan(amount,payments);
 
 
         clientRepository.findByEmail(authentication.getName()).addClientLoan(clientLoan);
