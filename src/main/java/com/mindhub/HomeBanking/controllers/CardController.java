@@ -8,6 +8,7 @@ import com.mindhub.HomeBanking.models.enums.CardType;
 import com.mindhub.HomeBanking.repositories.AccountRepository;
 import com.mindhub.HomeBanking.repositories.CardRepository;
 import com.mindhub.HomeBanking.repositories.ClientRepository;
+import com.mindhub.HomeBanking.services.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,17 +34,14 @@ public class CardController {
     @Autowired
     private ClientRepository clientRepository;
     @Autowired
-    private AccountRepository accountRepository;
-
+    private CardService cardService;
     @RequestMapping("/cards")
     public List<CardDto> getAll(){
-        return cardRepository.findAll().stream()
-                .map(card -> new CardDto(card))
-                .collect(toList());
+        return cardService.getAllCardsDto();
     }
     @RequestMapping("/cards/{id}")
     public CardDto getById(@PathVariable Long id){
-        return new CardDto(cardRepository.findById(id).orElse(null));
+        return cardService.getById(id);
     }
 
 
@@ -58,17 +56,7 @@ public class CardController {
             return new ResponseEntity<>("Already have a "+cardType+" card "+cardColor+".", HttpStatus.FORBIDDEN);
         }
 
-        Card newCard = new Card(cardType, cardColor, LocalDate.now());
-
-        do {
-            newCard.setNumber(genRandomCardNumber());
-        } while (cardRepository.findByNumber(newCard.getNumber()) != null);
-
-        newCard.setCvv(genCvv(newCard.getNumber()));
-
-        AuthClient.addCard(newCard);
-        cardRepository.save(newCard);
-
+        cardService.createCard(cardType, cardColor, AuthClient);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

@@ -7,6 +7,7 @@ import com.mindhub.HomeBanking.models.entities.ClientLoan;
 import com.mindhub.HomeBanking.models.entities.Transaction;
 import com.mindhub.HomeBanking.models.enums.TransactionType;
 import com.mindhub.HomeBanking.repositories.*;
+import com.mindhub.HomeBanking.services.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,24 +23,19 @@ import static java.util.stream.Collectors.toList;
 @RestController
 @RequestMapping("/api")
 public class LoanController {
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private ClientRepository clientRepository;
+
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
     private LoanRepository loanRepository;
     @Autowired
     private TransactionRepository transactionRepository;
-    @Autowired
-    private ClientLoanRepository clientLoanRepository;
 
+    @Autowired
+    private LoanService loanService;
     @RequestMapping(value="/loans",method = RequestMethod.GET)
     public List<LoanDto> getAll(){
-        return loanRepository.findAll().stream()
-                .map(loan -> new LoanDto(loan))
-                .collect(toList());
+        return loanService.getAll();
     }
 
     @Transactional
@@ -53,10 +49,6 @@ public class LoanController {
         Integer payments = clientLoanRecord.getPayments();
         String toAccountNumber = clientLoanRecord.getToAccountNumber();
 
-        System.out.println("loan: "+ loanRepository.findById(loanId).get());
-        System.out.println("amount: "+amount);
-        System.out.println("payments: "+payments);
-        System.out.println("toAccountNumber: "+toAccountNumber);
         if (loanId==null || amount == null || payments == null || toAccountNumber.isEmpty()) {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
@@ -80,25 +72,7 @@ public class LoanController {
             return new ResponseEntity<>("The amount is greater than the maximum allowed", HttpStatus.FORBIDDEN);
         }
 
-        clientRepository.findByEmail(authentication.getName());
-        ClientLoan clientLoan =new ClientLoan(amount,payments);
-
-
-        clientRepository.findByEmail(authentication.getName()).addClientLoan(clientLoan);
-        loanRepository.findById(loanId).get().addClientLoan(clientLoan);
-
-        clientLoanRepository.save(clientLoan);
-
-        //creamos la transaccion
-        Transaction transactionLoan = new Transaction(TransactionType.CREDIT,amount, "loan approved");
-
-        //actualizamos el balance de la cuenta destino
-        accountRepository.findByNumber(toAccountNumber).setBalance(accountRepository.findByNumber(toAccountNumber).getBalance() + amount);
-        accountRepository.findByNumber(toAccountNumber).addTransaction(transactionLoan);
-        //guardamos la transaccion
-        transactionRepository.save(transactionLoan);
-        //guardamos los cambios en las cuentas
-        accountRepository.save(accountRepository.findByNumber(toAccountNumber));
+        loanService.createLoan(clientLoanRecord,authentication);
 
         return  new ResponseEntity<>(HttpStatus.CREATED);
     }
