@@ -5,6 +5,7 @@ import com.mindhub.HomeBanking.models.entities.Account;
 import com.mindhub.HomeBanking.models.entities.Client;
 import com.mindhub.HomeBanking.repositories.AccountRepository;
 import com.mindhub.HomeBanking.repositories.ClientRepository;
+import com.mindhub.HomeBanking.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,8 @@ import static java.util.stream.Collectors.toList;
 @RestController
 @RequestMapping("/api")
 public class AccountController {
-
+    @Autowired
+    private AccountService accountService;
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
@@ -27,26 +29,23 @@ public class AccountController {
 
     @RequestMapping("/accounts")
     public List<AccountDto> getAll(){
-        return accountRepository.findAll().stream()
-                .map(account -> new AccountDto(account))
-                .collect(toList());
+        return accountService.getAll();
     }
     @RequestMapping("/accounts/{id}")
     public AccountDto getById(@PathVariable Long id, Authentication authentication){
+
         if(!accountRepository.findById(id).get().getOwner().getEmail().equals(authentication.getName())){
             return null;
         }
-        return new AccountDto(accountRepository.findById(id).orElse(null));
+
+        return accountService.getById(id, authentication);
     }
 
     @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.GET)
 
     public List<AccountDto> getCurrentAccounts( Authentication authentication) {
 
-        return accountRepository.findAll().stream()
-                .filter(account -> account.getOwner().getEmail().equals(authentication.getName()))
-                .map(account -> new AccountDto(account))
-                .collect(toList());
+        return accountService.getCurrentAccounts(authentication);
     }
 
     @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
@@ -60,10 +59,7 @@ public class AccountController {
 
         }
 
-        Account newAccount= new Account("VIN"+String.format("%03d",accountRepository.count()+1) , 0.0, LocalDate.now());
-        Client AuthClient = clientRepository.findByEmail(authentication.getName());
-        AuthClient.addAccount(newAccount);
-        accountRepository.save(newAccount);
+        accountService.createAccount(authentication);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
 
