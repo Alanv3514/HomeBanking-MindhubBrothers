@@ -9,11 +9,12 @@ import com.mindhub.HomeBanking.repositories.*;
 import com.mindhub.HomeBanking.services.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-
+@Service
 public class LoanServicesImplementations implements LoanService {
 
     @Autowired

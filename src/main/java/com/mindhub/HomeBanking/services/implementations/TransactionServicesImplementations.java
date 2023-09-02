@@ -8,11 +8,12 @@ import com.mindhub.HomeBanking.repositories.TransactionRepository;
 import com.mindhub.HomeBanking.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-
+@Service
 public class TransactionServicesImplementations implements TransactionService {
     @Autowired
     private TransactionRepository transactionRepository;

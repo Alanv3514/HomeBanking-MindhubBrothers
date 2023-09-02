@@ -11,6 +11,7 @@ import com.mindhub.HomeBanking.repositories.CardRepository;
 import com.mindhub.HomeBanking.services.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
 import static com.mindhub.HomeBanking.utils.utils.genCvv;
 import static com.mindhub.HomeBanking.utils.utils.genRandomCardNumber;
 import static java.util.stream.Collectors.toList;
-
+@Service
 public class CardServicesImplementations implements CardService {
 
     @Autowired
