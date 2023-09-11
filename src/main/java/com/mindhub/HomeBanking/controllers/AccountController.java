@@ -27,11 +27,11 @@ public class AccountController {
     @Autowired
     private ClientRepository clientRepository;
 
-    @RequestMapping("/accounts")
+    @GetMapping("/accounts")
     public List<AccountDto> getAll(){
         return accountService.getAll();
     }
-    @RequestMapping("/accounts/{id}")
+    @GetMapping("/accounts/{id}")
     public AccountDto getById(@PathVariable Long id, Authentication authentication){
 
         if(!accountRepository.findById(id).get().getOwner().getEmail().equals(authentication.getName())){
@@ -41,14 +41,14 @@ public class AccountController {
         return accountService.getById(id, authentication);
     }
 
-    @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.GET)
+    @GetMapping("/clients/current/accounts")
 
     public List<AccountDto> getCurrentAccounts( Authentication authentication) {
 
         return accountService.getCurrentAccounts(authentication);
     }
 
-    @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
+    @PostMapping("/clients/current/accounts")
 
     public ResponseEntity<Object> createAccount( Authentication authentication) {
 

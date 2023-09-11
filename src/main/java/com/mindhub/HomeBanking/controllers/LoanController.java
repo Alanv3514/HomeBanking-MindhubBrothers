@@ -33,13 +33,13 @@ public class LoanController {
 
     @Autowired
     private LoanService loanService;
-    @RequestMapping(value="/loans",method = RequestMethod.GET)
+    @GetMapping("/loans")
     public List<LoanDto> getAll(){
         return loanService.getAll();
     }
 
     @Transactional
-    @RequestMapping(value="/loans",method = RequestMethod.POST)
+    @PostMapping("/loans")
     public ResponseEntity<Object> createLoan(
             @RequestBody ClientLoanRecord clientLoanRecord,
             Authentication authentication){

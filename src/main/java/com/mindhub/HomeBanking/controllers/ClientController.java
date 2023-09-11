@@ -27,12 +27,12 @@ public class ClientController {
     private ClientRepository clientRepository;
     @Autowired
     private ClientService clientService;
-    @RequestMapping("/clients")
+    @GetMapping("/clients")
     public List<ClientDto> getAll(){
         return clientService.getClientsDTO();
     }
 
-    @RequestMapping(path = "/clients", method = RequestMethod.POST)
+    @PostMapping("/clients")
 
     public ResponseEntity<Object> saveClient(
 
@@ -54,12 +54,12 @@ public class ClientController {
 
     }
 
-    @RequestMapping("/clients/{id}")
+    @GetMapping("/clients/{id}")
     public ClientDto getById(@PathVariable Long id){
         return clientService.getClientsDTOById(id);
     }
 
-    @RequestMapping("/clients/current")
+    @GetMapping("/clients/current")
     public ClientDto getCurrentClient(Authentication authentication) {
         return clientService.getCurrentClient(authentication);
     }

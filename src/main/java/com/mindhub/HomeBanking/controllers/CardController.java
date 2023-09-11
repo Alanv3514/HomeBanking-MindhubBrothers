@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -35,17 +32,17 @@ public class CardController {
     private ClientRepository clientRepository;
     @Autowired
     private CardService cardService;
-    @RequestMapping("/cards")
+    @GetMapping("/cards")
     public List<CardDto> getAll(){
         return cardService.getAllCardsDto();
     }
-    @RequestMapping("/cards/{id}")
+    @GetMapping("/cards/{id}")
     public CardDto getById(@PathVariable Long id){
         return cardService.getById(id);
     }
 
 
-    @RequestMapping("/clients/current/cards")
+    @PostMapping("/clients/current/cards")
     public ResponseEntity<Object> createCard(@RequestParam  CardType cardType, @RequestParam CardColor cardColor, Authentication authentication) {
 
         Client AuthClient = clientRepository.findByEmail(authentication.getName());
