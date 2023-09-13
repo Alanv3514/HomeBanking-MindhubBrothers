@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Random;
 
-public class utils {
+public final class utils {
+    private utils(){};
 
     public static String genRandomCardNumber() {
         String cardNumber = "8545";
