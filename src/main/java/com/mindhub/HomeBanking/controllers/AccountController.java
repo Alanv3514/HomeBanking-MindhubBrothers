@@ -40,11 +40,10 @@ public class AccountController {
 
         return accountService.getById(id, authentication);
     }
-
     @GetMapping("/clients/current/accounts")
 
     public List<AccountDto> getCurrentAccounts( Authentication authentication) {
-
+        System.out.println(accountService.getCurrentAccounts(authentication).stream().toString());
         return accountService.getCurrentAccounts(authentication);
     }
 
@@ -53,9 +52,9 @@ public class AccountController {
     public ResponseEntity<Object> createAccount( Authentication authentication) {
 
 
-        if (clientRepository.findByEmail(authentication.getName()).getAccounts().stream().count()==3) {
+        if (clientRepository.findByEmail(authentication.getName()).getAccounts().stream().filter(account -> account.isActive()).count()==3) {
 
-            return new ResponseEntity<>("Already have 3 accounts", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Already have 3 actives accounts", HttpStatus.FORBIDDEN);
 
         }
 
@@ -63,5 +62,25 @@ public class AccountController {
 
         return new ResponseEntity<>(HttpStatus.CREATED);
 
+    }
+    @DeleteMapping("/clients/current/accounts")
+    public ResponseEntity<Object> deleteAccount (@RequestParam String accountNumber, Authentication authentication){
+        Client client = clientRepository.findByEmail(authentication.getName());
+        Account account = client.getAccounts().stream()
+                .filter(a -> a.getNumber().equals(accountNumber))
+                .findFirst()
+                .orElse(null);
+
+        if(client.getAccounts().stream().filter(account1 -> account1.isActive()).count()==1){
+            return new ResponseEntity<>("Cannot delete all accounts",HttpStatus.FORBIDDEN);
+        }
+
+        if (account==null){
+            return new ResponseEntity<>("Account number does not belong to the authenticated user", HttpStatus.FORBIDDEN);
+        }
+
+        accountService.deactivateAccount(authentication,accountNumber);
+
+        return new ResponseEntity<>("Delete account succesful",HttpStatus.OK);
     }
 }

@@ -15,4 +15,6 @@ public interface AccountService {
 
 
     void createAccount(Authentication authentication);
+
+    void deactivateAccount(Authentication authentication, String accountNumber);
 }

@@ -36,11 +36,13 @@ public class AccountServicesImplementations implements AccountService {
 
     @Override
     public List<AccountDto> getCurrentAccounts(Authentication authentication) {
-        return accountRepository.findAll().stream()
-                .filter(account -> account.getOwner().getEmail().equals(authentication.getName()))
-                .map(account -> new AccountDto(account))
-                .collect(toList());
+            List<AccountDto> listita =accountRepository.findByActiveTrue().stream()
+                    .filter(account -> account.getOwner().getEmail().equals(authentication.getName()))
+                    .map(account -> new AccountDto(account))
+                    .collect(toList());
+        return listita;
     }
+
 
     @Override
     public void createAccount(Authentication authentication) {
@@ -48,5 +50,14 @@ public class AccountServicesImplementations implements AccountService {
         Client AuthClient = clientRepository.findByEmail(authentication.getName());
         AuthClient.addAccount(newAccount);
         accountRepository.save(newAccount);
+    }
+
+    @Override
+    public void deactivateAccount(Authentication authentication, String accountNumber){
+        Account account = accountRepository.findByNumber(accountNumber);
+        if (account.isActive()) {
+            account.switchActive();
+            accountRepository.save(account);
+    }
     }
 }

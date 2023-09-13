@@ -94,6 +94,7 @@
                                         <h5 class="card-title">{{ account.number }}</h5>
                                         <p class="card-text"> {{ formatDate(account.creationDate) }}</p>
                                         <p class="text-center lead account-balance"> ${{ account.balance }} </p>
+                                        <button v-on:click.prevent="deleteAccount(account.number)" class="btn btn-sm btn-danger">Delete</button>
                                     </div>
                                 </div>
                             </a>

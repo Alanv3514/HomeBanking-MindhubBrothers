@@ -11,7 +11,9 @@ Vue.createApp({
             axios.get("/api/clients/current")
                 .then((response) => {
                     //get client ifo
+
                     this.clientInfo = response.data;
+                    console.log(this.clientInfo.accounts);
                 })
                 .catch((error) => {
                     // handle error
@@ -37,6 +39,14 @@ Vue.createApp({
                     this.errorMsg = error.response.data;
                     this.errorToats.show();
                 })
+        },
+        deleteAccount: function(accountNumber){
+            axios.delete(`/api/clients/current/accounts?accountNumber=${accountNumber}`)
+            .then(response=>window.location.reload())
+            .catch((error)=>{
+                this.errorMsg=error.response.data;
+                this.errorToats.show();
+            })
         }
     },
     mounted: function () {
