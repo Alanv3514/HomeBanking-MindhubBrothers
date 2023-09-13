@@ -55,6 +55,8 @@ public class LoanServicesImplementations implements LoanService {
         //creamos la transaccion
         Transaction transactionLoan = new Transaction(TransactionType.CREDIT,amount, "loan approved");
 
+        Double newBalance=accountRepository.findByNumber(toAccountNumber).getBalance() + amount;
+        transactionLoan.setBalanceAt(newBalance);
         //actualizamos el balance de la cuenta destino
         accountRepository.findByNumber(toAccountNumber).setBalance(accountRepository.findByNumber(toAccountNumber).getBalance() + amount);
         accountRepository.findByNumber(toAccountNumber).addTransaction(transactionLoan);

@@ -40,7 +40,7 @@ public class TransactionServicesImplementations implements TransactionService {
         Transaction transactionCredit = new Transaction(TransactionType.CREDIT,amount, description);
 
         Double newBalanceDebit =accountRepository.findByNumber(accountFromNumber).getBalance() - amount;
-        Double newBalanceCredit =accountRepository.findByNumber(accountFromNumber).getBalance() + amount;
+        Double newBalanceCredit =accountRepository.findByNumber(toAccountNumber).getBalance() + amount;
 
         //actualizamos el balance de la cuenta origen
         transactionDebit.setBalanceAt(newBalanceDebit);

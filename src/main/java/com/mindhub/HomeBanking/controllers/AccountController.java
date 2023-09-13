@@ -70,6 +70,10 @@ public class AccountController {
                 .findFirst()
                 .orElse(null);
 
+        if (accountRepository.findByNumber(accountNumber).getBalance()!=0){
+            return new ResponseEntity<>("Cannot delete account with money",HttpStatus.FORBIDDEN);
+        }
+
         if(client.getAccounts().stream().filter(account1 -> account1.isActive()).count()==1){
             return new ResponseEntity<>("Cannot delete all accounts",HttpStatus.FORBIDDEN);
         }
