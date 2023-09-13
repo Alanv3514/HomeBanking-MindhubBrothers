@@ -98,7 +98,6 @@ public class Account {
     public void addTransaction(Transaction transaction) {
         transaction.setAccount(this);
         transactions.add(transaction);
-
     }
 
 

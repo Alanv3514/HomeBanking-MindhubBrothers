@@ -39,11 +39,16 @@ public class TransactionServicesImplementations implements TransactionService {
         Transaction transactionDebit = new Transaction(TransactionType.DEBIT,amount, description);
         Transaction transactionCredit = new Transaction(TransactionType.CREDIT,amount, description);
 
+        Double newBalanceDebit =accountRepository.findByNumber(accountFromNumber).getBalance() - amount;
+        Double newBalanceCredit =accountRepository.findByNumber(accountFromNumber).getBalance() + amount;
+
         //actualizamos el balance de la cuenta origen
-        accountRepository.findByNumber(accountFromNumber).setBalance(accountRepository.findByNumber(accountFromNumber).getBalance() - amount);
+        transactionDebit.setBalanceAt(newBalanceDebit);
+        accountRepository.findByNumber(accountFromNumber).setBalance(newBalanceDebit);
         accountRepository.findByNumber(accountFromNumber).addTransaction(transactionDebit);
         //actualizamos el balance de la cuenta destino
-        accountRepository.findByNumber(toAccountNumber).setBalance(accountRepository.findByNumber(toAccountNumber).getBalance() + amount);
+        transactionCredit.setBalanceAt(newBalanceCredit);
+        accountRepository.findByNumber(toAccountNumber).setBalance(newBalanceCredit);
         accountRepository.findByNumber(toAccountNumber).addTransaction(transactionCredit);
         //guardamos la transaccion
         transactionRepository.save(transactionDebit);
