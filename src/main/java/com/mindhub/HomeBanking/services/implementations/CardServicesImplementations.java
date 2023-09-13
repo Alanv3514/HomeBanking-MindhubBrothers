@@ -2,6 +2,7 @@ package com.mindhub.HomeBanking.services.implementations;
 
 import com.mindhub.HomeBanking.dtos.AccountDto;
 import com.mindhub.HomeBanking.dtos.CardDto;
+import com.mindhub.HomeBanking.models.entities.Account;
 import com.mindhub.HomeBanking.models.entities.Card;
 import com.mindhub.HomeBanking.models.entities.Client;
 import com.mindhub.HomeBanking.models.enums.CardColor;
@@ -55,6 +56,13 @@ public class CardServicesImplementations implements CardService {
         cardRepository.save(newCard);
 
     }
-
+    @Override
+    public void deleteCard(CardType cardType, CardColor cardColor, Client AuthClient) {
+        Card card = cardRepository.findByActiveIsTrueAndColorAndTypeAndOwner(cardColor,cardType,AuthClient);
+        if (card.isActive()) {
+            card.switchActive();
+            cardRepository.save(card);
+    }
+    }
 
 }

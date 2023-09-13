@@ -23,6 +23,16 @@ Vue.createApp({
                     this.errorToats.show();
                 })
         },
+        deleteCard: function (card) {
+                    event.preventDefault();
+                    axios.delete(`/api/clients/current/cards?cardType=${card.type}&cardColor=${card.color}`)
+                            .then(response => window.location.href = "/web/cards.html")
+                            .catch((error) => {
+                                this.errorMsg = error.response.data;
+                                this.errorToats.show();
+                            })
+        },
+
         formatDate: function (date) {
             return new Date(date).toLocaleDateString('en-gb');
         },

@@ -18,4 +18,6 @@ public interface CardService {
     CardDto getById(Long id);
 
     void createCard(CardType cardType, CardColor cardColor, Client AuthClient);
+
+    void deleteCard(CardType cardType, CardColor cardColor, Client authClient);
 }

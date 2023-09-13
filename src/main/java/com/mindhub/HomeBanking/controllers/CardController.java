@@ -48,12 +48,20 @@ public class CardController {
         Client AuthClient = clientRepository.findByEmail(authentication.getName());
 
 
-        if (cardRepository.findByOwner(AuthClient).stream()
+        if (cardRepository.findByOwner(AuthClient).stream().filter(card -> card.isActive())
                 .anyMatch(card -> card.getType().equals(cardType) && card.getColor().equals(cardColor))) {
             return new ResponseEntity<>("Already have a "+cardType+" card "+cardColor+".", HttpStatus.FORBIDDEN);
         }
 
         cardService.createCard(cardType, cardColor, AuthClient);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    @DeleteMapping("/clients/current/cards")
+    public ResponseEntity<Object> deleteCard(@RequestParam  CardType cardType, @RequestParam CardColor cardColor, Authentication authentication) {
+
+        Client AuthClient = clientRepository.findByEmail(authentication.getName());
+
+        cardService.deleteCard(cardType, cardColor, AuthClient);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

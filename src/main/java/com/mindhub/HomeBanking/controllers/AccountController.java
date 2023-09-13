@@ -43,7 +43,6 @@ public class AccountController {
     @GetMapping("/clients/current/accounts")
 
     public List<AccountDto> getCurrentAccounts( Authentication authentication) {
-        System.out.println(accountService.getCurrentAccounts(authentication).stream().toString());
         return accountService.getCurrentAccounts(authentication);
     }
 

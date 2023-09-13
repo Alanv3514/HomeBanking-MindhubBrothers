@@ -31,6 +31,7 @@ public class ClientDto  {
                 .map(ClientLoanDTO::new)
                 .collect(toList());
         this.cards = client.getCards().stream()
+                .filter(card -> card.isActive())
                 .map(CardDto::new)
                 .collect(toList());
     }

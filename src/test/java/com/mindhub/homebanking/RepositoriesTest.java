@@ -1,4 +1,4 @@
-package com.mindhub.homebanking;
+package com.mindhub.HomeBanking;
 
 import com.mindhub.HomeBanking.models.entities.*;
 import com.mindhub.HomeBanking.repositories.*;
