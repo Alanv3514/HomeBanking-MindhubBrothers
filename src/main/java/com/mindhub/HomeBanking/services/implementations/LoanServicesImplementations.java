@@ -2,6 +2,8 @@ package com.mindhub.HomeBanking.services.implementations;
 
 import com.mindhub.HomeBanking.dtos.ClientLoanRecord;
 import com.mindhub.HomeBanking.dtos.LoanDto;
+import com.mindhub.HomeBanking.models.entities.Account;
+import com.mindhub.HomeBanking.models.entities.Client;
 import com.mindhub.HomeBanking.models.entities.ClientLoan;
 import com.mindhub.HomeBanking.models.entities.Transaction;
 import com.mindhub.HomeBanking.models.enums.TransactionType;
@@ -42,12 +44,13 @@ public class LoanServicesImplementations implements LoanService {
         Integer payments = clientLoanRecord.getPayments();
         String toAccountNumber = clientLoanRecord.getToAccountNumber();
 
+        Client authClient = clientRepository.findByEmail(authentication.getName());
+        Account currentAccount = accountRepository.findByNumber(toAccountNumber);
 
-        clientRepository.findByEmail(authentication.getName());
         ClientLoan clientLoan =new ClientLoan(amount,payments);
 
 
-        clientRepository.findByEmail(authentication.getName()).addClientLoan(clientLoan);
+        authClient.addClientLoan(clientLoan);
         loanRepository.findById(loanId).get().addClientLoan(clientLoan);
 
         clientLoanRepository.save(clientLoan);
@@ -55,14 +58,14 @@ public class LoanServicesImplementations implements LoanService {
         //creamos la transaccion
         Transaction transactionLoan = new Transaction(TransactionType.CREDIT,amount, "loan approved");
 
-        Double newBalance=accountRepository.findByNumber(toAccountNumber).getBalance() + amount;
+        Double newBalance=currentAccount.getBalance() + amount;
         transactionLoan.setBalanceAt(newBalance);
         //actualizamos el balance de la cuenta destino
-        accountRepository.findByNumber(toAccountNumber).setBalance(accountRepository.findByNumber(toAccountNumber).getBalance() + amount);
-        accountRepository.findByNumber(toAccountNumber).addTransaction(transactionLoan);
+        currentAccount.setBalance(currentAccount.getBalance() + amount);
+        currentAccount.addTransaction(transactionLoan);
         //guardamos la transaccion
         transactionRepository.save(transactionLoan);
         //guardamos los cambios en las cuentas
-        accountRepository.save(accountRepository.findByNumber(toAccountNumber));
+        accountRepository.save(currentAccount);
     }
 }

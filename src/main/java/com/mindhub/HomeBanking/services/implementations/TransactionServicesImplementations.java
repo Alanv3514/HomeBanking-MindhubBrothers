@@ -1,6 +1,7 @@
 package com.mindhub.HomeBanking.services.implementations;
 
 import com.mindhub.HomeBanking.dtos.TransactionDto;
+import com.mindhub.HomeBanking.models.entities.Account;
 import com.mindhub.HomeBanking.models.entities.Transaction;
 import com.mindhub.HomeBanking.models.enums.TransactionType;
 import com.mindhub.HomeBanking.repositories.AccountRepository;
@@ -34,27 +35,31 @@ public class TransactionServicesImplementations implements TransactionService {
 
     @Override
     public void makeTransaction(Double amount, String description, String accountFromNumber, String toAccountNumber, Authentication authentication) {
+        Account accountFrom = accountRepository.findByNumber(accountFromNumber);
+        Account toAccount = accountRepository.findByNumber(toAccountNumber);
 
         //creamos la transaccion
         Transaction transactionDebit = new Transaction(TransactionType.DEBIT,amount, description);
         Transaction transactionCredit = new Transaction(TransactionType.CREDIT,amount, description);
 
-        Double newBalanceDebit =accountRepository.findByNumber(accountFromNumber).getBalance() - amount;
-        Double newBalanceCredit =accountRepository.findByNumber(toAccountNumber).getBalance() + amount;
+
+
+        Double newBalanceDebit =accountFrom.getBalance() - amount;
+        Double newBalanceCredit =toAccount.getBalance() + amount;
 
         //actualizamos el balance de la cuenta origen
         transactionDebit.setBalanceAt(newBalanceDebit);
-        accountRepository.findByNumber(accountFromNumber).setBalance(newBalanceDebit);
-        accountRepository.findByNumber(accountFromNumber).addTransaction(transactionDebit);
+        accountFrom.setBalance(newBalanceDebit);
+        accountFrom.addTransaction(transactionDebit);
         //actualizamos el balance de la cuenta destino
         transactionCredit.setBalanceAt(newBalanceCredit);
-        accountRepository.findByNumber(toAccountNumber).setBalance(newBalanceCredit);
-        accountRepository.findByNumber(toAccountNumber).addTransaction(transactionCredit);
+        toAccount.setBalance(newBalanceCredit);
+        toAccount.addTransaction(transactionCredit);
         //guardamos la transaccion
         transactionRepository.save(transactionDebit);
         transactionRepository.save(transactionCredit);
         //guardamos los cambios en las cuentas
-        accountRepository.save(accountRepository.findByNumber(accountFromNumber));
-        accountRepository.save(accountRepository.findByNumber(toAccountNumber));
+        accountRepository.save(accountFrom);
+        accountRepository.save(toAccount);
     }
 }
