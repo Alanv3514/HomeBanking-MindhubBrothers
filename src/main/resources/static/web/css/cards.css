@@ -166,3 +166,8 @@
 	-webkit-transform: rotateY(0deg);
 	-moz-transform: rotateY(0deg);
 }
+
+.tachado {
+    text-decoration: line-through!important;
+    color:red;
+}

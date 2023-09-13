@@ -6,6 +6,7 @@ Vue.createApp({
             debitCards: [],
             errorToats: null,
             errorMsg: null,
+
         }
     },
     methods: {
