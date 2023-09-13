@@ -40,12 +40,21 @@ public class ClientController {
 
             @RequestParam String email, @RequestParam String password) {
 
-        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        if (firstName.isEmpty()) {
+            return new ResponseEntity<>("Missing Name", HttpStatus.FORBIDDEN);
+        }
+        if (lastName.isEmpty()) {
+            return new ResponseEntity<>("Missing Lastname", HttpStatus.FORBIDDEN);
+        }
+        if (email.isEmpty()) {
+            return new ResponseEntity<>("Missing Email", HttpStatus.FORBIDDEN);
+        }
+        if (password.isEmpty()) {
+            return new ResponseEntity<>("Missing Password", HttpStatus.FORBIDDEN);
         }
 
         if (clientRepository.findByEmail(email) != null) {
-            return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Email already in use", HttpStatus.FORBIDDEN);
         }
 
         clientService.saveClient(new Client(firstName, lastName, email, passwordEncoder.encode(password)));
