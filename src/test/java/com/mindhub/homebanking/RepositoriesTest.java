@@ -1,13 +1,7 @@
 package com.mindhub.homebanking;
 
-import com.mindhub.HomeBanking.models.entities.Account;
-import com.mindhub.HomeBanking.models.entities.Card;
-import com.mindhub.HomeBanking.models.entities.Client;
-import com.mindhub.HomeBanking.models.entities.Loan;
-import com.mindhub.HomeBanking.repositories.AccountRepository;
-import com.mindhub.HomeBanking.repositories.CardRepository;
-import com.mindhub.HomeBanking.repositories.ClientRepository;
-import com.mindhub.HomeBanking.repositories.LoanRepository;
+import com.mindhub.HomeBanking.models.entities.*;
+import com.mindhub.HomeBanking.repositories.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -25,19 +19,34 @@ import static org.hamcrest.Matchers.*;
 @AutoConfigureTestDatabase(replace = NONE)
 public class RepositoriesTest {
 
-    @Autowired
-    LoanRepository loanRepository;
 
+
+    @Autowired
+    AccountRepository accountRepository;
     @Test
-    public void existLoans(){
-        List<Loan> loans = loanRepository.findAll();
-        assertThat(loans,is(not(empty())));
+    public void existAccounts(){
+        List<Account> accounts = accountRepository.findAll();
+        assertThat(accounts,is(not(empty())));
+    }
+    @Test
+    public void orphanAccount(){
+        List<Account> accounts = accountRepository.findAll();
+        assertThat(accounts, hasItem(
+                hasProperty("owner", is(not(nullValue())))));
     }
 
+    @Autowired
+    CardRepository cardRepository;
     @Test
-    public void existPersonalLoan(){
-        List<Loan> loans = loanRepository.findAll();
-        assertThat(loans, hasItem(hasProperty("name", is("personal"))));
+    public void existCards(){
+        List<Card> cards = cardRepository.findAll();
+        assertThat(cards,is(not(empty())));
+    }
+    @Test
+    public void validCards(){
+        List<Card> cards = cardRepository.findAll();
+        assertThat(cards, hasItem(
+                hasProperty("number",is(not("^\\d{16}$\n")))));
     }
 
     @Autowired
@@ -56,25 +65,52 @@ public class RepositoriesTest {
     }
 
     @Autowired
-    AccountRepository accountRepository;
+    ClientLoanRepository clientLoanRepository;
     @Test
-    public void existAccounts(){
-        List<Account> accounts = accountRepository.findAll();
-        assertThat(accounts,is(not(empty())));
+    public void existClienLoans(){
+        List<ClientLoan> clientLoans = clientLoanRepository.findAll();
+        assertThat(clientLoans,is(not(empty())));
     }
     @Test
-    public void orphanAccount(){
-        List<Account> accounts = accountRepository.findAll();
-        assertThat(accounts, hasItem(hasProperty("owner", is(not(nullValue())))));
+    public void emptyAmountClientLoan(){
+        List<ClientLoan> clientLoans = clientLoanRepository.findAll();
+        assertThat(clientLoans,hasItem(
+                hasProperty("amount",is(not(nullValue())))
+        ));
     }
 
     @Autowired
-    CardRepository cardRepository;
+    LoanRepository loanRepository;
+
     @Test
-    public void existCards(){
-        List<Card> cards = cardRepository.findAll();
-        assertThat(cards,is(not(empty())));
+    public void existLoans(){
+        List<Loan> loans = loanRepository.findAll();
+        assertThat(loans,is(not(empty())));
     }
 
-
+    @Test
+    public void existPersonalLoan(){
+        List<Loan> loans = loanRepository.findAll();
+        assertThat(loans, hasItem(
+                hasProperty("name", is("personal"))));
+    }
+    @Autowired
+    TransactionRepository transactionRepository;
+    @Test
+    public void isNotAdminTransaction(){
+        List<Transaction> transactions= transactionRepository.findAll();
+        assertThat(transactions, hasItem(
+                hasProperty("account",
+                        hasProperty("owner",
+                                hasProperty("role",is(not("ADMIN")))))
+        ));
+    }
+    @Test
+    public void isNotEmptyTransaction(){
+        List<Transaction> transactions= transactionRepository.findAll();
+        assertThat(transactions,
+                hasItem(
+                        hasProperty("amount",is(not(nullValue())))
+                ));
+    }
 }

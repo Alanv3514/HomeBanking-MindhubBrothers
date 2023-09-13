@@ -23,7 +23,7 @@ public class Transaction {
 
     public Transaction(TransactionType type, Double amount, String description) {
         this.type = type;
-        setAmount( amount, type);
+        this.amount = amount;
         this.description = description;
         this.date = LocalDate.now();
     }
@@ -49,12 +49,12 @@ public class Transaction {
         return date;
     }
     public Double getAmount() {
-        return amount;
+        return this.type.equals(TransactionType.CREDIT)? amount : -amount;
     }
 
-    public void setAmount(Double amount, TransactionType type) {
+    public void setAmount(Double amount) {
 
-        this.amount = this.type.equals(TransactionType.CREDIT)? amount : -amount;
+        this.amount = amount;
     }
 
     public Account getAccount() {
