@@ -8,25 +8,25 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
+
 @Entity
 public class Loan {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
-    private String type;
     private String name;
     private Double maxAmount;
     @ElementCollection
-    private List<Integer> payments = new ArrayList<>();
+    private List<Payment> payments = new ArrayList<>();
 
     @OneToMany (mappedBy = "loan", fetch = FetchType.EAGER)
     private Set<ClientLoan> clientLoans = new HashSet<>();
     public Loan(){
     }
 
-    public Loan( String type,double maxAmount, List<Integer> payments) {
-        this.type=type;
+    public Loan( String type,double maxAmount, List<Payment> payments) {
         this.name= type;
         this.maxAmount = maxAmount;
         this.payments = payments;
@@ -34,14 +34,6 @@ public class Loan {
 
     public Long getId() {
         return id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getName() {
@@ -60,11 +52,11 @@ public class Loan {
         this.maxAmount = maxAmount;
     }
 
-    public List<Integer> getPayments(){
+    public List<Payment> getPayments(){
         return payments;
     }
 
-    public void setPayments(List<Integer> payments) {
+    public void setPayments(List<Payment> payments) {
         this.payments = payments;
     }
 

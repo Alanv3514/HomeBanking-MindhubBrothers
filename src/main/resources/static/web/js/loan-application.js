@@ -10,7 +10,9 @@ Vue.createApp({
             errorMsg: null,
             accountToNumber: "VIN",
             amount: 0,
-            fees: []
+            fees: [],
+            interestRate:0,
+            ratesList:[]
         }
     },
     methods: {
@@ -50,7 +52,7 @@ Vue.createApp({
             }
         },
         apply: function () {
-            axios.post("/api/loans", { loanId: this.loanTypeId, amount: this.amount, payments: this.payments, toAccountNumber: this.accountToNumber })
+            axios.post("/api/loans", { loanId: this.loanTypeId, amount: this.amount, payments: this.payments.amountPayment, toAccountNumber: this.accountToNumber })
                 .then(response => {
                     this.modal.hide();
                     this.okmodal.show();
@@ -62,13 +64,21 @@ Vue.createApp({
         },
         changedType: function () {
             this.paymentsList = this.loanTypes.find(loanType => loanType.id == this.loanTypeId).payments;
+            this.ratesList=this.loanTypes.find(loanType => loanType.id == this.loanTypeId).rate;
+
+        },
+        changedPayments: function () {
+                             console.log(this.ratesList)
+                             console.log(this.payments)
         },
         finish: function () {
             window.location.reload();
         },
         checkFees: function () {
             this.fees = [];
-            this.totalLoan = parseInt(this.amount) + (this.amount * 0.2);
+
+            this.totalLoan = parseInt(this.amount) + (this.amount * this.interestRate/100);
+
             let amount = this.totalLoan / this.payments;
             for (let i = 1; i <= this.payments; i++) {
                 this.fees.push({ amount: amount });

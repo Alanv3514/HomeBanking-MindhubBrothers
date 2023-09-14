@@ -20,6 +20,8 @@ public class ClientLoan{
     private Double amount;
     private Integer payments;
 
+    private Double interestRate;
+
     public ClientLoan(){}
 
     public ClientLoan(Double amount, Integer payments) {

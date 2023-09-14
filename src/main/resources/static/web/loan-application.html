@@ -85,7 +85,7 @@
                                     </div>
                                     <div class="col">
                                         <label for="payments" class="form-label">Payments</label>
-                                        <select id="payments" v-model="payments" class="form-select"
+                                        <select id="payments" v-model="payments" v-on:change="changedPayments" class="form-select"
                                             aria-label="Default select example" required>
                                             <option value="0">Open this select menu</option>
                                             <option v-for="payment in paymentsList" v-bind:value="payment">{{ payment }}
