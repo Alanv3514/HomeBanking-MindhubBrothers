@@ -24,12 +24,14 @@ public class ClientDto  {
         this.lastName = client.getLastName();
         this.email = client.getEmail();
         this.accounts= client.getAccounts().stream()
+                .filter(account -> account.isActive())
                 .map(AccountDto::new)
                 .collect(toList());
         this.loans = client.getClientLoans().stream()
                 .map(ClientLoanDTO::new)
                 .collect(toList());
         this.cards = client.getCards().stream()
+                .filter(card -> card.isActive())
                 .map(CardDto::new)
                 .collect(toList());
     }

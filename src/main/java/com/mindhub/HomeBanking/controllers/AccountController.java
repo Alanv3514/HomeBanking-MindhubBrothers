@@ -5,6 +5,7 @@ import com.mindhub.HomeBanking.models.entities.Account;
 import com.mindhub.HomeBanking.models.entities.Client;
 import com.mindhub.HomeBanking.repositories.AccountRepository;
 import com.mindhub.HomeBanking.repositories.ClientRepository;
+import com.mindhub.HomeBanking.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,53 +20,70 @@ import static java.util.stream.Collectors.toList;
 @RestController
 @RequestMapping("/api")
 public class AccountController {
-
+    @Autowired
+    private AccountService accountService;
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
     private ClientRepository clientRepository;
 
-    @RequestMapping("/accounts")
+    @GetMapping("/accounts")
     public List<AccountDto> getAll(){
-        return accountRepository.findAll().stream()
-                .map(account -> new AccountDto(account))
-                .collect(toList());
+        return accountService.getAll();
     }
-    @RequestMapping("/accounts/{id}")
+    @GetMapping("/accounts/{id}")
     public AccountDto getById(@PathVariable Long id, Authentication authentication){
+
         if(!accountRepository.findById(id).get().getOwner().getEmail().equals(authentication.getName())){
             return null;
         }
-        return new AccountDto(accountRepository.findById(id).orElse(null));
-    }
 
-    @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.GET)
+        return accountService.getById(id, authentication);
+    }
+    @GetMapping("/clients/current/accounts")
 
     public List<AccountDto> getCurrentAccounts( Authentication authentication) {
-
-        return accountRepository.findAll().stream()
-                .filter(account -> account.getOwner().getEmail().equals(authentication.getName()))
-                .map(account -> new AccountDto(account))
-                .collect(toList());
+        return accountService.getCurrentAccounts(authentication);
     }
 
-    @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
+    @PostMapping("/clients/current/accounts")
 
     public ResponseEntity<Object> createAccount( Authentication authentication) {
 
 
-        if (clientRepository.findByEmail(authentication.getName()).getAccounts().stream().count()==3) {
+        if (clientRepository.findByEmail(authentication.getName()).getAccounts().stream().filter(account -> account.isActive()).count()==3) {
 
-            return new ResponseEntity<>("Already have 3 accounts", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Already have 3 actives accounts", HttpStatus.FORBIDDEN);
 
         }
 
-        Account newAccount= new Account("VIN"+String.format("%03d",accountRepository.count()+1) , 0.0, LocalDate.now());
-        Client AuthClient = clientRepository.findByEmail(authentication.getName());
-        AuthClient.addAccount(newAccount);
-        accountRepository.save(newAccount);
+        accountService.createAccount(authentication);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
 
+    }
+    @DeleteMapping("/clients/current/accounts")
+    public ResponseEntity<Object> deleteAccount (@RequestParam String accountNumber, Authentication authentication){
+        Client client = clientRepository.findByEmail(authentication.getName());
+        Account account = client.getAccounts().stream()
+                .filter(a -> a.getNumber().equals(accountNumber))
+                .findFirst()
+                .orElse(null);
+
+        if (accountRepository.findByNumber(accountNumber).getBalance()!=0){
+            return new ResponseEntity<>("Cannot delete account with money",HttpStatus.FORBIDDEN);
+        }
+
+        if(client.getAccounts().stream().filter(account1 -> account1.isActive()).count()==1){
+            return new ResponseEntity<>("Cannot delete all accounts",HttpStatus.FORBIDDEN);
+        }
+
+        if (account==null){
+            return new ResponseEntity<>("Account number does not belong to the authenticated user", HttpStatus.FORBIDDEN);
+        }
+
+        accountService.deactivateAccount(authentication,accountNumber);
+
+        return new ResponseEntity<>("Delete account succesful",HttpStatus.OK);
     }
 }

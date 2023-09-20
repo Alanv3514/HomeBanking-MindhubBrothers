@@ -17,8 +17,31 @@ public class ClientLoan{
     @ManyToOne(fetch = FetchType.EAGER)
     private Loan loan;
 
+    private Double amount;
+    private Integer payments;
+
     public ClientLoan(){}
 
+    public ClientLoan(Double amount, Integer payments) {
+        this.amount = amount;
+        this.payments = payments;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public Integer getPayments() {
+        return payments;
+    }
+
+    public void setPayments(Integer payments) {
+        this.payments = payments;
+    }
 
     public Long getId() {
         return id;

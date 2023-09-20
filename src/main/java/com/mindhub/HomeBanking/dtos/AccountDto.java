@@ -11,14 +11,14 @@ public class AccountDto {
     private Long id;
     private String number;
     private Double balance;
-    private LocalDate date;
+    private LocalDate creationDate;
     private List<TransactionDto> transactions;
 
     public AccountDto(Account account) {
         this.id = account.getId();
         this.number = account.getNumber();
         this.balance = account.getBalance();
-        this.date = account.getDate();
+        this.creationDate = account.getDate();
         this.transactions= account.getTransactions().stream()
                 .map(TransactionDto::new)
                 .collect(toList());
@@ -35,8 +35,8 @@ public class AccountDto {
         return balance;
     }
 
-    public LocalDate getDate(){
-        return date;
+    public LocalDate getCreationDate(){
+        return creationDate;
     }
 
     public List<TransactionDto> getTransactions() {

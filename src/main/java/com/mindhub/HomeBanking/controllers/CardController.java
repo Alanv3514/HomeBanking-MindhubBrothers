@@ -8,14 +8,12 @@ import com.mindhub.HomeBanking.models.enums.CardType;
 import com.mindhub.HomeBanking.repositories.AccountRepository;
 import com.mindhub.HomeBanking.repositories.CardRepository;
 import com.mindhub.HomeBanking.repositories.ClientRepository;
+import com.mindhub.HomeBanking.services.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,42 +31,40 @@ public class CardController {
     @Autowired
     private ClientRepository clientRepository;
     @Autowired
-    private AccountRepository accountRepository;
-
-    @RequestMapping("/cards")
+    private CardService cardService;
+    @GetMapping("/cards")
     public List<CardDto> getAll(){
-        return cardRepository.findAll().stream()
-                .map(card -> new CardDto(card))
-                .collect(toList());
+        return cardService.getAllCardsDto();
     }
-    @RequestMapping("/cards/{id}")
+    @GetMapping("/cards/{id}")
     public CardDto getById(@PathVariable Long id){
-        return new CardDto(cardRepository.findById(id).orElse(null));
+        return cardService.getById(id);
     }
 
 
-    @RequestMapping("/clients/current/cards")
+    @PostMapping("/clients/current/cards")
     public ResponseEntity<Object> createCard(@RequestParam  CardType cardType, @RequestParam CardColor cardColor, Authentication authentication) {
 
         Client AuthClient = clientRepository.findByEmail(authentication.getName());
 
 
-        if (cardRepository.findByOwner(AuthClient).stream()
+
+        if (cardRepository.findByOwner(AuthClient).stream().filter(card -> card.isActive())
                 .anyMatch(card -> card.getType().equals(cardType) && card.getColor().equals(cardColor))) {
             return new ResponseEntity<>("Already have a "+cardType+" card "+cardColor+".", HttpStatus.FORBIDDEN);
         }
 
-        Card newCard = new Card(cardType, cardColor, LocalDate.now());
 
-        do {
-            newCard.setNumber(genRandomCardNumber());
-        } while (cardRepository.findByNumber(newCard.getNumber()) != null);
+        cardService.createCard(cardType, cardColor, AuthClient);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    @DeleteMapping("/clients/current/cards")
+    public ResponseEntity<Object> deleteCard(@RequestParam  CardType cardType, @RequestParam CardColor cardColor, Authentication authentication) {
 
-        newCard.setCvv(genCvv(newCard.getNumber()));
+        Client AuthClient = clientRepository.findByEmail(authentication.getName());
 
-        AuthClient.addCard(newCard);
-        cardRepository.save(newCard);
 
+        cardService.deleteCard(cardType, cardColor, AuthClient);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

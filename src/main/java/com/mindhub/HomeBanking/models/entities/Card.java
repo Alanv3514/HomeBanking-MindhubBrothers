@@ -29,7 +29,7 @@ public class Card {
     private Integer cvv;
     private LocalDate fromDate;
     private LocalDate thruDate;
-
+    private boolean active;
 
     public Card(){};
 
@@ -38,6 +38,7 @@ public class Card {
         this.color = color;
         this.fromDate = fromDate;
         setThruDate(fromDate);
+        this.active=true;
     }
 
     public Long getId() {
@@ -96,6 +97,16 @@ public class Card {
         this.thruDate = this.fromDate.plusYears(5);
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+    public void switchActive(){
+        this.active=!this.active;
+    }
     public String getCardHolder() {
         return cardHolder;
     }
